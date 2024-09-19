@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 19 sep. 2024 à 08:54
+-- Généré le : jeu. 19 sep. 2024 à 09:43
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -34,6 +34,7 @@ CREATE TABLE `commande` (
   `date_heure` datetime DEFAULT current_timestamp(),
   `total_ttc` decimal(10,2) DEFAULT 0.00,
   `type_commande` varchar(20) NOT NULL
+  `TVA` float() NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -48,35 +49,6 @@ CREATE TABLE `ligne_commande` (
   `id_produit` int(11) NOT NULL,
   `quantite` int(11) NOT NULL,
   `total_ht` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `notification`
---
-
-CREATE TABLE `notification` (
-  `id_notification` int(11) NOT NULL,
-  `id_commande` int(11) NOT NULL,
-  `type_notification` varchar(50) NOT NULL,
-  `date_heure_notification` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `paiement`
---
-
-CREATE TABLE `paiement` (
-  `id_paiement` int(11) NOT NULL,
-  `id_commande` int(11) NOT NULL,
-  `montant` decimal(10,2) NOT NULL,
-  `moyen_paiement` varchar(50) NOT NULL,
-  `numero_carte` varchar(100) NOT NULL,
-  `cvc` varchar(3) NOT NULL,
-  `date_expiration` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -125,20 +97,6 @@ ALTER TABLE `ligne_commande`
   ADD KEY `id_produit` (`id_produit`);
 
 --
--- Index pour la table `notification`
---
-ALTER TABLE `notification`
-  ADD PRIMARY KEY (`id_notification`),
-  ADD KEY `id_commande` (`id_commande`);
-
---
--- Index pour la table `paiement`
---
-ALTER TABLE `paiement`
-  ADD PRIMARY KEY (`id_paiement`),
-  ADD KEY `id_commande` (`id_commande`);
-
---
 -- Index pour la table `produit`
 --
 ALTER TABLE `produit`
@@ -168,18 +126,6 @@ ALTER TABLE `ligne_commande`
   MODIFY `id_ligne_commande` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `notification`
---
-ALTER TABLE `notification`
-  MODIFY `id_notification` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `paiement`
---
-ALTER TABLE `paiement`
-  MODIFY `id_paiement` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT pour la table `produit`
 --
 ALTER TABLE `produit`
@@ -207,18 +153,6 @@ ALTER TABLE `commande`
 ALTER TABLE `ligne_commande`
   ADD CONSTRAINT `ligne_commande_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`) ON DELETE CASCADE,
   ADD CONSTRAINT `ligne_commande_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produit` (`id_produit`);
-
---
--- Contraintes pour la table `notification`
---
-ALTER TABLE `notification`
-  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `paiement`
---
-ALTER TABLE `paiement`
-  ADD CONSTRAINT `paiement_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
