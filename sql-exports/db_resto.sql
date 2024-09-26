@@ -17,13 +17,17 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Base de données : `db_lotissement`
---
+-- 
+-- Création de la base de données avec UTF-8
+-- 
+CREATE DATABASE IF NOT EXISTS `db_resto` 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
+
+USE `db_resto`;
 
 -- --------------------------------------------------------
 
---
 -- Structure de la table `commande`
 --
 
@@ -33,13 +37,12 @@ CREATE TABLE `commande` (
   `etat_commande` varchar(50) NOT NULL,
   `date_heure` datetime DEFAULT current_timestamp(),
   `total_ttc` decimal(10,2) DEFAULT 0.00,
-  `type_commande` varchar(20) NOT NULL
-  `TVA` float() NOT NULL
+  `type_commande` varchar(20) NOT NULL,
+  `TVA` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
---
 -- Structure de la table `ligne_commande`
 --
 
@@ -53,7 +56,6 @@ CREATE TABLE `ligne_commande` (
 
 -- --------------------------------------------------------
 
---
 -- Structure de la table `produit`
 --
 
@@ -65,7 +67,6 @@ CREATE TABLE `produit` (
 
 -- --------------------------------------------------------
 
---
 -- Structure de la table `utilisateur`
 --
 
@@ -81,30 +82,22 @@ CREATE TABLE `utilisateur` (
 -- Index pour les tables déchargées
 --
 
---
 -- Index pour la table `commande`
---
 ALTER TABLE `commande`
   ADD PRIMARY KEY (`id_commande`),
   ADD KEY `id_utilisateur` (`id_utilisateur`);
 
---
 -- Index pour la table `ligne_commande`
---
 ALTER TABLE `ligne_commande`
   ADD PRIMARY KEY (`id_ligne_commande`),
   ADD KEY `id_commande` (`id_commande`),
   ADD KEY `id_produit` (`id_produit`);
 
---
 -- Index pour la table `produit`
---
 ALTER TABLE `produit`
   ADD PRIMARY KEY (`id_produit`);
 
---
 -- Index pour la table `utilisateur`
---
 ALTER TABLE `utilisateur`
   ADD PRIMARY KEY (`id_utilisateur`),
   ADD UNIQUE KEY `email` (`email`);
@@ -113,27 +106,19 @@ ALTER TABLE `utilisateur`
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
---
 -- AUTO_INCREMENT pour la table `commande`
---
 ALTER TABLE `commande`
   MODIFY `id_commande` int(11) NOT NULL AUTO_INCREMENT;
 
---
 -- AUTO_INCREMENT pour la table `ligne_commande`
---
 ALTER TABLE `ligne_commande`
   MODIFY `id_ligne_commande` int(11) NOT NULL AUTO_INCREMENT;
 
---
 -- AUTO_INCREMENT pour la table `produit`
---
 ALTER TABLE `produit`
   MODIFY `id_produit` int(11) NOT NULL AUTO_INCREMENT;
 
---
 -- AUTO_INCREMENT pour la table `utilisateur`
---
 ALTER TABLE `utilisateur`
   MODIFY `id_utilisateur` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -141,15 +126,11 @@ ALTER TABLE `utilisateur`
 -- Contraintes pour les tables déchargées
 --
 
---
 -- Contraintes pour la table `commande`
---
 ALTER TABLE `commande`
   ADD CONSTRAINT `commande_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`);
 
---
 -- Contraintes pour la table `ligne_commande`
---
 ALTER TABLE `ligne_commande`
   ADD CONSTRAINT `ligne_commande_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`) ON DELETE CASCADE,
   ADD CONSTRAINT `ligne_commande_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produit` (`id_produit`);
