@@ -1,22 +1,20 @@
 ul {
-    list-style-type: disc;
-    padding-left: 20px;
+    list-style-type: none; /* Supprime les puces de la liste */
+    padding-left: 0;
 }
 
 li {
+    display: flex;
+    justify-content: flex-start; /* Aligne tout à gauche */
+    align-items: center;
     margin-bottom: 10px;
     font-size: 16px;
 }
 
 input[type="number"] {
-    margin-left: 10px;
     padding: 5px;
-    width: 120px;
+    width: 50px;
     font-size: 14px;
-
-    /* For Webkit browsers (Chrome, Safari, Edge) */
-    -webkit-appearance: none;
-    -moz-appearance: textfield;
 }
 
 input[type="number"]::-webkit-inner-spin-button, 
