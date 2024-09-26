@@ -1,6 +1,5 @@
 <?php
     $pageTitle= "Commander";
-    include 'fonctions/fonctions.php';
     include 'fonctions/header.php';
 ?>
     <link rel="stylesheet" href="css/commander.css">
