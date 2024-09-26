@@ -1,6 +1,5 @@
 <?php
     $pageTitle= "Payer";
-    include 'fonctions/fonctions.php';
     include 'fonctions/header.php';
 ?>
     <h1>Payer</h1>
