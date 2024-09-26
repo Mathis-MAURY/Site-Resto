@@ -11,4 +11,5 @@
 <a href="commander.php" class="button">Faite une commande !</a><br><br>
 <a href="confirmer.php" class="button">Revenir à la confirmation de commande.</a><br>
 
+
 <?php include 'fonctions/footer.php'; ?>

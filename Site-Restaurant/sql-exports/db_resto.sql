@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 19 sep. 2024 à 09:43
+-- Généré le : dim. 10 sep. 2023 à 16:37
 -- Version du serveur : 10.4.28-MariaDB
--- Version de PHP : 8.2.4
+-- Version de PHP : 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,123 +17,212 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- 
--- Création de la base de données avec UTF-8
--- 
-CREATE DATABASE IF NOT EXISTS `db_resto` 
-CHARACTER SET utf8mb4 
-COLLATE utf8mb4_general_ci;
-
-USE `db_resto`;
+--
+-- Base de données : `db_restoweb`
+--
+CREATE DATABASE IF NOT EXISTS `db_restoweb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `db_restoweb`;
 
 -- --------------------------------------------------------
 
+--
 -- Structure de la table `commande`
 --
 
+DROP TABLE IF EXISTS `commande`;
 CREATE TABLE `commande` (
   `id_commande` int(11) NOT NULL,
-  `id_utilisateur` int(11) NOT NULL,
-  `etat_commande` varchar(50) NOT NULL,
-  `date_heure` datetime DEFAULT current_timestamp(),
-  `total_ttc` decimal(10,2) DEFAULT 0.00,
-  `type_commande` varchar(20) NOT NULL,
-  `TVA` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `id_user` int(11) NOT NULL,
+  `id_etat` int(11) NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `total_commande` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `type_conso` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
--- Structure de la table `ligne_commande`
+--
+-- Structure de la table `ligne`
 --
 
-CREATE TABLE `ligne_commande` (
-  `id_ligne_commande` int(11) NOT NULL,
+DROP TABLE IF EXISTS `ligne`;
+CREATE TABLE `ligne` (
+  `id_ligne` int(11) NOT NULL,
   `id_commande` int(11) NOT NULL,
   `id_produit` int(11) NOT NULL,
-  `quantite` int(11) NOT NULL,
-  `total_ht` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `qte` int(11) NOT NULL DEFAULT 0,
+  `total_ligne_ht` decimal(10,2) NOT NULL DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déclencheurs `ligne`
+--
+DROP TRIGGER IF EXISTS `after_ligne_insert`;
+DELIMITER $$
+CREATE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne` FOR EACH ROW BEGIN
+    set @total_commande = 0;
+    set @type_conso = 0;
+    set @tva = 0;
+    -- Lit la commande
+    SELECT type_conso INTO @type_conso FROM commande where commande.id_commande = NEW.id_commande;
+    -- Détermine le taux de TVA
+    IF @type_conso=1 THEN SET @tva=1.055; END IF;
+    IF @type_conso=2 THEN SET @tva=1.1; END IF;
+    -- Calcule le total HT des lignes de la commande
+    SELECT sum(total_ligne_ht) INTO @total_commande FROM ligne WHERE ligne.id_commande = NEW.id_commande;
+    -- Calcule le total TTC
+    SET @total_commande=@total_commande*@tva;
+    --  Met à jour le total commande 
+    UPDATE commande SET total_commande=@total_commande where commande.id_commande = NEW.id_commande;
+  END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `after_ligne_update`;
+DELIMITER $$
+CREATE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne` FOR EACH ROW BEGIN
+    set @total_commande = 0;
+    set @type_conso = 0;
+    set @tva = 0;
+    -- Lit la commande
+    SELECT type_conso INTO @type_conso FROM commande where commande.id_commande = NEW.id_commande;
+    -- Détermine le taux de TVA
+    IF @type_conso=1 THEN SET @tva=1.055; END IF;
+    IF @type_conso=2 THEN SET @tva=1.1; END IF;
+    -- Calcule le total HT des lignes de la commande
+    SELECT sum(total_ligne_ht) INTO @total_commande FROM ligne WHERE ligne.id_commande = NEW.id_commande;
+    -- Calcule le total TTC
+    SET @total_commande=@total_commande*@tva;
+    --  Met à jour le total commande 
+    UPDATE commande SET total_commande=@total_commande where commande.id_commande = NEW.id_commande;
+  END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `before_ligne_insert`;
+DELIMITER $$
+CREATE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne` FOR EACH ROW BEGIN
+    set @prix_ht = 0;
+    -- Lit le prix du produit
+    SELECT prix_ht INTO @prix_ht FROM produit WHERE produit.id_produit = NEW.id_produit; 
+    --  Calcule le total ligne 
+    SET NEW.total_ligne_ht = @prix_ht * NEW.qte;
+  END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `before_ligne_update`;
+DELIMITER $$
+CREATE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne` FOR EACH ROW BEGIN
+    set @prix_ht = 0;
+    -- Lit le prix du produit
+    SELECT prix_ht INTO @prix_ht FROM produit WHERE produit.id_produit = NEW.id_produit; 
+    --  Calcule le total ligne 
+    SET NEW.total_ligne_ht = @prix_ht * NEW.qte;
+  END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
+--
 -- Structure de la table `produit`
 --
 
+DROP TABLE IF EXISTS `produit`;
 CREATE TABLE `produit` (
   `id_produit` int(11) NOT NULL,
-  `libproduit` varchar(255) NOT NULL,
-  `prix_unitaire_ht` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `libelle` varchar(255) NOT NULL,
+  `prix_ht` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
--- Structure de la table `utilisateur`
+--
+-- Structure de la table `user`
 --
 
-CREATE TABLE `utilisateur` (
-  `id_utilisateur` int(11) NOT NULL,
-  `login` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `mot_de_passe` varchar(255) NOT NULL,
-  `role` varchar(10) DEFAULT 'client'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id_user` int(11) NOT NULL,
+  `login` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Index pour les tables déchargées
 --
 
+--
 -- Index pour la table `commande`
+--
 ALTER TABLE `commande`
   ADD PRIMARY KEY (`id_commande`),
-  ADD KEY `id_utilisateur` (`id_utilisateur`);
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_etat` (`id_etat`);
 
--- Index pour la table `ligne_commande`
-ALTER TABLE `ligne_commande`
-  ADD PRIMARY KEY (`id_ligne_commande`),
+--
+-- Index pour la table `ligne`
+--
+ALTER TABLE `ligne`
+  ADD PRIMARY KEY (`id_ligne`),
   ADD KEY `id_commande` (`id_commande`),
   ADD KEY `id_produit` (`id_produit`);
 
+--
 -- Index pour la table `produit`
+--
 ALTER TABLE `produit`
   ADD PRIMARY KEY (`id_produit`);
 
--- Index pour la table `utilisateur`
-ALTER TABLE `utilisateur`
-  ADD PRIMARY KEY (`id_utilisateur`),
-  ADD UNIQUE KEY `email` (`email`);
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id_user`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
+--
 -- AUTO_INCREMENT pour la table `commande`
+--
 ALTER TABLE `commande`
   MODIFY `id_commande` int(11) NOT NULL AUTO_INCREMENT;
 
--- AUTO_INCREMENT pour la table `ligne_commande`
-ALTER TABLE `ligne_commande`
-  MODIFY `id_ligne_commande` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `ligne`
+--
+ALTER TABLE `ligne`
+  MODIFY `id_ligne` int(11) NOT NULL AUTO_INCREMENT;
 
+--
 -- AUTO_INCREMENT pour la table `produit`
+--
 ALTER TABLE `produit`
   MODIFY `id_produit` int(11) NOT NULL AUTO_INCREMENT;
 
--- AUTO_INCREMENT pour la table `utilisateur`
-ALTER TABLE `utilisateur`
-  MODIFY `id_utilisateur` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
+--
 -- Contraintes pour la table `commande`
+--
 ALTER TABLE `commande`
-  ADD CONSTRAINT `commande_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`);
+  ADD CONSTRAINT `commande_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
--- Contraintes pour la table `ligne_commande`
-ALTER TABLE `ligne_commande`
-  ADD CONSTRAINT `ligne_commande_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ligne_commande_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produit` (`id_produit`);
+--
+-- Contraintes pour la table `ligne`
+--
+ALTER TABLE `ligne`
+  ADD CONSTRAINT `ligne_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commande` (`id_commande`),
+  ADD CONSTRAINT `ligne_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produit` (`id_produit`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
