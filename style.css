@@ -1,0 +1,26 @@
+ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+input[type="number"] {
+    margin-left: 10px;
+    padding: 5px;
+    width: 120px;
+    font-size: 14px;
+
+    /* For Webkit browsers (Chrome, Safari, Edge) */
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: inline;
+    opacity: 1;
+}
