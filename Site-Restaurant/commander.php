@@ -1,17 +1,10 @@
 <?php
-    $pagetitle= "commander";
+    $pagetitle= "Commander";
     include 'fonctions/fonctions.php';
+    include 'fonctions/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commander</title>
-    <link rel="stylesheet" href="css/commander.css">
-</head>
-<body>
-    <h1>MENU</h1><br>
+    <h1>MENU</h1>
+
     <form action="payer.php" method="post">
     <ul>
         <li>
@@ -55,6 +48,5 @@
         <button type="submit">Commander</button>&nbsp;&nbsp;&nbsp;
         <a href="index.php">Annuler</a>
     </label>
-    </form>
-</body>
-</html>
+    </form> 
+    <?php include 'fonctions/footer.php'; ?>
