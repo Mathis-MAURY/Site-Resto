@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payer</title>
-</head>
-
-<body>
+<?php
+    $pagetitle= "Payer";
+    include 'fonctions/fonctions.php';
+    include 'fonctions/header.php';
+?>
     <h1>Payer</h1>
     <p>Commande n° XXXX pour un montant de XX,XX €</p>
 
@@ -25,6 +21,4 @@
         <button type="reset">Annuler</button><br>
     </form>
 
-
-</body>
-</html>
+    <?php include 'fonctions/footer.php'; ?>
