@@ -1,6 +1,6 @@
 <?php
     $pagetitle= "commander";
-    include 'fonctions.php';
+    include 'fonctions/fonctions.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -12,7 +12,7 @@
 </head>
 <body>
     <h1>MENU</h1>
-    <form action="submit">
+    <form action="payer.php" method="post">
     <ul>
         <li>Pizza Bosca(17€)
         <input type="number" min="0" max="100" step="1" placeholder="0">

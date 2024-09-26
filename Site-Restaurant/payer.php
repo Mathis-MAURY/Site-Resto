@@ -23,7 +23,6 @@
         <button type="submit">Valider</button>
         <button type="commander.php">Modifier la commande</button>
         <button type="reset">Annuler</button><br>
-        
     </form>
 
 
