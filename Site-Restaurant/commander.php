@@ -8,10 +8,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commander</title>
-    <link rel="stylesheet" href="commander.css">
+    <link rel="stylesheet" href="css/commander.css">
 </head>
 <body>
-    <h1>MENU</h1>
+    <h1>MENU</h1><br>
     <form action="payer.php" method="post">
     <ul>
         <li>
@@ -49,11 +49,11 @@
     </ul>
     <label class="radio-label">
         <input type="radio" name="commande" value="surplace">
-        <span class="custom-radio"></span> Sur place
+        <span class="custom-radio"></span> Sur place<br><br>
         <input type="radio" name="commande" value="emporter">
         <span class="custom-radio"></span> À emporter<br><br>
-        <button type="submit">Commander</button>
-        <a href="accueil.php">Annuler</a>
+        <button type="submit">Commander</button>&nbsp;&nbsp;&nbsp;
+        <a href="index.php">Annuler</a>
     </label>
     </form>
 </body>
