@@ -10,16 +10,10 @@ body {
     display: flex;
     gap: 10px;
   }
-  nav ul li {
-    display: inline;
-  }
-  footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: inline;
+    opacity: 1;
   }
   
