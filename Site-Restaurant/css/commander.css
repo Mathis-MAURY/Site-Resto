@@ -5,20 +5,21 @@ ul {
 
 li {
     display: flex;
-    justify-content: flex-start; /* Garde tout aligné à gauche */
     align-items: center; /* Centre verticalement les éléments */
     margin-bottom: 10px;
     font-size: 16px;
 }
 
 span {
-    width: 270px; /* Définit une largeur fixe pour le texte pour aligner les inputs */
+    width: 260px; /* Définit une largeur fixe pour le texte pour aligner les inputs */
+    margin-right: 20px;
 }
 
 input[type="number"] {
     padding: 5px;
-    width: 35px;
+    width: 50px;
     font-size: 14px;
+    text-align: center;
 }
 
 input[type="number"]::-webkit-inner-spin-button, 
