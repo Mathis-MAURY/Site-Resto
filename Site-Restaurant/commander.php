@@ -1,5 +1,5 @@
 <?php
-    $pagetitle= "Commander";
+    $pageTitle= "Commander";
     include 'fonctions/fonctions.php';
     include 'fonctions/header.php';
 ?>

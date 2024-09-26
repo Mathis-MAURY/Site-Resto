@@ -13,8 +13,6 @@ input[type="number"] {
     padding: 5px;
     width: 120px;
     font-size: 14px;
-
-
 }
 
 input[type="number"]::-webkit-inner-spin-button, 
