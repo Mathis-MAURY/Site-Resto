@@ -3,20 +3,48 @@
   include 'fonctions/header.php';
 ?>
 
-<section>
-  <h1>Inscription</h1>
-  <form action="connexion.php" method="post">
-    <label for="username">Nom d'utilisateur :</label>
-    <input type="text" id="username" name="username" required>
+<!DOCTYPE html>
+<html lang="fr">
 
-    <label for="email">Email :</label>
-    <input type="email" id="email" name="email" required>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="css/inscription.css">
+</head>
 
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="password" required>
+<body>
+    <img src="assets/images/log.png" alt="">
+    <form action="" method="POST" class="form_connexion_inscription">
+        <h2>INSCRIVEZ-VOUS</h2>
+        <p class="welcome">
+            Remplissez les champs ci-dessous pour créer votre compte <span style="color: #00A45B;">FlashMeal </span> !
+        </p>
+       
+        <p class="separator"></p>
 
-    <button type="submit">S'inscrire</button>
-  </form>
-</section>
+        <label> Adresse e-mail </label>
+        <input type="email" name="email" required value="">
+        
+        <p class="separator"></p>
+
+        <label> login</label>
+        <input type="login" name="login" required value="">
+
+        <p class="separator"></p>
+        
+        <label> Mot de passe</label>
+        <input type="password" name="password" required value="">
+        
+        <a href="connexion.php" class="sublink">Vous avez déjà un compte ?</a>
+        
+        <p class="separator"></p>
+        
+            <input type="submit" name="submit" value="Inscription">
+    </form>
+
+</body>
+
+</html>
 
 <?php include 'fonctions/footer.php'; ?>

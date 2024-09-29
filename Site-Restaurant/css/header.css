@@ -1,0 +1,70 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: black;
+    padding: 20px 0;
+    /* Ajustez cette valeur si nécessaire */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    /* Fixe le header en haut */
+    top: 0;
+    /* Positionne le header tout en haut */
+    left: 0;
+    /* Aligne à gauche */
+    width: 100%;
+    /* Prend toute la largeur de la page */
+    z-index: 1000;
+    /* Assure que le header est au-dessus des autres éléments */
+}
+
+/* Espacement supérieur pour le contenu */
+.content {
+    padding-top: 80px;
+    /* Ajustez cette valeur pour correspondre à la hauteur totale du header */
+}
+
+/* Autres styles du contenu */
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+        text-align: center;
+    }
+}
