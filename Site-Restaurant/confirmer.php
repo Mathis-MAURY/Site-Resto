@@ -1,5 +1,5 @@
 <?php
-    $pagetitle= "Confirmer";
+    $pageTitle= "Confirmer";
     include 'fonctions/fonctions.php';
     include 'fonctions/header.php';
 ?>
@@ -7,6 +7,5 @@
     <p>Votre commande n° XXXX pour un montant de XX,XX € est en cours de préparation</p>
     <p>Vous recevrez un message dés qu'elle sera prête</p>
     <p>Merci</p>
-
-    <button type="commander.php">Revenir a l'acceuil</button><br>
+    <a href="index.php" class="button">Revenir à l'accueil</a>
     <?php include 'fonctions/footer.php'; ?>

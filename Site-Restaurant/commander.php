@@ -1,8 +1,8 @@
 <?php
-    $pagetitle= "Commander";
-    include 'fonctions/fonctions.php';
+    $pageTitle= "Commander";
     include 'fonctions/header.php';
 ?>
+    <link rel="stylesheet" href="css/commander.css">
     <h1>MENU</h1>
 
     <form action="payer.php" method="post">
