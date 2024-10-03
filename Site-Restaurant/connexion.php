@@ -7,12 +7,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-// Autoload classes
-function my_autoloader($c) {
-    include "assets/functions/$c.php";
-}
-spl_autoload_register('my_autoloader');
-
 $erreur = "";
 $inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
 unset($_SESSION["inscriptionReussie"]);
@@ -24,6 +18,8 @@ if (!empty($_POST["login"]) && !empty($_POST["password"])) {
     $mdp = $_POST["password"];
 
     if ($db->validateUser($login, $mdp)) {
+        $_SESSION["user"] = ["login" => $login, "password" => $mdp];
+
         header("Location: commander.php");
         exit();
     } else {
@@ -34,14 +30,12 @@ if (!empty($_POST["login"]) && !empty($_POST["password"])) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlashMeal - Connexion à votre compte</title>
     <link rel="stylesheet" href="css/connexion.css">
 </head>
-
 <body>
 
     <form action="" method="POST" class="form_connexion_inscription">
@@ -65,12 +59,11 @@ if (!empty($_POST["login"]) && !empty($_POST["password"])) {
         <input type="submit" name="submit" value="Connexion">
            
         <?php if (!empty($erreur)) : ?>
-            <p class="error"><?php echo htmlspecialchars($erreur); ?></p> <!-- Added htmlspecialchars for security -->
+            <p class="error"><?php echo htmlspecialchars($erreur); ?></p>
         <?php endif; ?>
     </form>
 
 </body>
-
 </html>
 
 <?php include 'fonctions/footer.php'; ?>

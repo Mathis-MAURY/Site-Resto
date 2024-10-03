@@ -106,8 +106,4 @@ class ConnexionBDD
     }
 
 }
-
-
-
-
 ?>
