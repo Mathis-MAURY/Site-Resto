@@ -3,48 +3,20 @@ $pageTitle = "Connexion";
 include 'fonctions/header.php';
 include 'fonctions/ConnexionBDD.php';
 
-<<<<<<< HEAD
-session_start();
-=======
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
->>>>>>> 3ea34dcbe3aba0b86aef7db32ae2877efeabb46b
 
-$messageerreur = "";
-$inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
-unset($_SESSION["inscriptionReussie"]);
 function my_autoloader($c)
 {
     include "assets/functions/$c.php";
 }
 spl_autoload_register('my_autoloader');
 
-<<<<<<< HEAD
-    $error = '';
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Récupérer le nom d'utilisateur et le mot de passe
-        $login = $dbh->real_escape_string($_POST['login']);
-        $password = $_POST['password'];
-    
-        // Requête pour récupérer le mot de passe haché
-        $result = $dbh->query("SELECT password FROM user WHERE login = '$login'");
-    
-        if ($result && $result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            
-            if (password_verify($password, $row['password'])) {
-                $_SESSION['login'] = $login;
-                header("Location: commander.php");
-                exit();
-            } else {
-                $error = "Nom d'utilisateur ou mot de passe incorrect.";
-            }
-        }
+$erreur = "";
+$inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
+unset($_SESSION["inscriptionReussie"]);
 
-      //  $result->free(); 
-    }
-=======
 $user = FALSE;
 
 $db = new ConnexionBDD();
@@ -57,10 +29,9 @@ if (!empty($_POST["login"]) && !empty($_POST["mdp"])) {
     if ($estConnecte) {
         header("Location: commander.php");
     } else {
-        $messageerreur = "Login ou mot de passe incorrect";
+        $erreur = "Login ou mot de passe incorrect";
     }
 }
->>>>>>> 3ea34dcbe3aba0b86aef7db32ae2877efeabb46b
 ?>
 <!DOCTYPE html>
 <html lang="fr">
