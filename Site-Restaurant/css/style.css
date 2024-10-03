@@ -20,3 +20,9 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: inline;
     opacity: 1;
 }
+
+.imageindex {
+    width: 100%; /* S'adapte à la largeur de son conteneur */
+    max-width: 75px; /* Taille maximale */
+    height: auto; /* Pour garder le rapport d'aspect */
+}
