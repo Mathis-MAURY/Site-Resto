@@ -1,6 +1,7 @@
 <?php
   $pageTitle = "Inscription";
   include 'fonctions/header.php';
+  include 'fonctions/fonction.php';
 ?>
 
 <!DOCTYPE html>
