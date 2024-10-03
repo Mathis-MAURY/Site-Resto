@@ -55,9 +55,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hacher le mot de passe pour plus de sécurité
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Préparer la requête SQL
+    // Préparer la requête SQL avec PDO
     $sql = "INSERT INTO user (email, login, password) VALUES (:email, :login, :password)";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $pdo->prepare($sql);  // Utiliser la connexion PDO obtenue
 
     // Lier les paramètres aux valeurs
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
