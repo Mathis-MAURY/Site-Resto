@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Connexion";
 include 'fonctions/header.php';
-include 'fonctions/fonction.php';
+include 'fonctions/ConnexionBDD.php';
 
 session_start();
 
@@ -26,11 +26,9 @@ session_start();
             } else {
                 $error = "Nom d'utilisateur ou mot de passe incorrect.";
             }
-        } else {
-            $error = "Nom d'utilisateur ou mot de passe incorrect.";
         }
-    
-        $result->free(); 
+
+      //  $result->free(); 
     }
 ?>
 <!DOCTYPE html>
