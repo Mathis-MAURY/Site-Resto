@@ -1,3 +1,18 @@
+<?php
+// Connexion à la base de données
+$servername = "localhost";
+$username = "root";  // Remplace par ton nom d'utilisateur MySQL
+$password = "";  // Remplace par ton mot de passe MySQL
+$dbname = "db_restoweb";
+
+// Crée la connexion
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Vérifie la connexion
+if ($conn->connect_error) {
+    die("Échec de la connexion : " . $conn->connect_error);
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
