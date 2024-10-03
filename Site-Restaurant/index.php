@@ -19,6 +19,7 @@
 </section>
 
 <a href="commander.php" class="button">Faites une commande !</a><br><br>
+<a href="deconnexion.php" class="button">Se deconnecter !</a><br><br>
 
 <?php include 'fonctions/footer.php'; ?>
 </body>
