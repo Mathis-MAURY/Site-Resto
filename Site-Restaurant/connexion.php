@@ -1,17 +1,15 @@
 <?php
 $pageTitle = "Connexion";
-include 'fonctions/header.php';
-include 'fonctions/ConnexionBDD.php';
+
+// Autoload classes
+function my_autoloader($class) {
+    include "fonctions/$class.php";
+}
+spl_autoload_register('my_autoloader');
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
-
-// Autoload classes
-function my_autoloader($c) {
-    include "assets/functions/$c.php";
-}
-spl_autoload_register('my_autoloader');
 
 $erreur = "";
 $inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
@@ -23,7 +21,7 @@ if (!empty($_POST["login"]) && !empty($_POST["password"])) {
     $login = $_POST["login"];
     $mdp = $_POST["password"];
 
-    if ($db->validateUser($login, $mdp)) {
+    if ($db->login($login, $mdp)) {
         header("Location: commander.php");
         exit();
     } else {
