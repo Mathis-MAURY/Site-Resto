@@ -3,11 +3,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-if (!isset($_SESSION["user"])) {
-    header("Location: connexion.php");
-    die();
-}
-
 function autoloader($className)
 {
     include "fonctions/$className.php";
