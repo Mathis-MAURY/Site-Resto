@@ -5,14 +5,7 @@ include 'fonctions/fonction.php';
 
 session_start(); // Démarre la session
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Paramètres de connexion
     $dbh = db_connect();
-
-    // Vérification de la connexion
-    if ($dbh->connect_error) {
-        die("Échec de la connexion : " . $dbh->connect_error);
-    }
 
     // Récupérer le nom d'utilisateur et le mot de passe
     $login = $dbh->real_escape_string($_POST['login']);
@@ -38,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Fermer la connexion
     $dbh->close();
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
