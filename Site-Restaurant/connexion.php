@@ -3,34 +3,35 @@ $pageTitle = "Connexion";
 include 'fonctions/header.php';
 include 'fonctions/fonction.php';
 
-session_start(); // Démarre la session
+session_start();
 
     $dbh = db_connect();
 
-    // Récupérer le nom d'utilisateur et le mot de passe
-    $login = $dbh->real_escape_string($_POST['login']);
-    $password = $_POST['password'];
-
-    // Requête pour récupérer le mot de passe haché
-    $result = $dbh->query("SELECT login FROM user WHERE password = '$password'");
-
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        // Vérifie le mot de passe
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['login'] = $login; // Stocke le nom d'utilisateur dans la session
-            echo "Connexion réussie !";
-            header("Location: dashboard.php"); // Exemple de redirection
-            exit();
+    $error = '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Récupérer le nom d'utilisateur et le mot de passe
+        $login = $dbh->real_escape_string($_POST['login']);
+        $password = $_POST['password'];
+    
+        // Requête pour récupérer le mot de passe haché
+        $result = $dbh->query("SELECT password FROM user WHERE login = '$login'");
+    
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            
+            if (password_verify($password, $row['password'])) {
+                $_SESSION['login'] = $login;
+                header("Location: commander.php");
+                exit();
+            } else {
+                $error = "Nom d'utilisateur ou mot de passe incorrect.";
+            }
         } else {
-            echo "Nom d'utilisateur ou mot de passe incorrect.";
+            $error = "Nom d'utilisateur ou mot de passe incorrect.";
         }
-    } else {
-        echo "Nom d'utilisateur ou mot de passe incorrect.";
+    
+        $result->free(); 
     }
-
-    // Fermer la connexion
-    $dbh->close();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -62,8 +63,12 @@ session_start(); // Démarre la session
         
         <p class="separator"></p>
         
-            <input type="submit" name="submit" value="Connexion">
-    </form>
+        <input type="submit" name="submit" value="Connexion">
+           
+        <?php if (isset($error)) : ?>
+            <p class="error"><?php echo $error; ?></p>
+            <?php endif; ?>
+     </form>
 
 </body>
 
