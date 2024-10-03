@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600;700&family=Poppins:wght@200;300;400;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*Scroll bar CSS*/
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 6px;
+}
+
+/* Ajout d'un espace avant et après le header */
+header {
+    background-color: black;
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Navigation menu */
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+/* Espace pour que le contenu ne soit pas caché par le header */
+body {
+    padding-top: 120px;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Style pour le formulaire */
+.form_connexion_inscription {
+    display: flex;
+    background-color: #fff;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.form_connexion_inscription label {
+    margin: 2px 0;
+}
+
+.form_connexion_inscription input {
+    padding: 5px;
+    outline: 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+img {
+    width: 100px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #00A45B;
+    letter-spacing: 7px;
+}
+
+.form_connexion_inscription input:focus {
+    border: 2px solid #00A45B;
+}
+
+.form_connexion_inscription input {
+    padding: 8px 10px;
+    border: 2px solid transparent;
+    background: rgb(250, 250, 250);
+    transition: .2s border;
+}
+
+.form_connexion_inscription input[type=submit] {
+    background: #00A45B;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+p.separator {
+    height: 2px;
+    width: 80%;
+    background: transparent;
+    margin: 15px auto;
+}
+
+p.welcome {
+    text-align: center;
+}
+
+input[type=checkbox] {
+    accent-color: #00A45B;
+}
+
+.sublink {
+    text-decoration: none;
+    color: #777;
+    margin-top: 5px;
+    text-align: right;
+}
+
+ul li {
+    color: red;
+}
+
+ul {
+    box-sizing: border-box;
+    padding: 0 2rem;
+    list-style-type: circle;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+        text-align: center;
+    }
+}

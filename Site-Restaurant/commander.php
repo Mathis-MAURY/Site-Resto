@@ -1,52 +1,52 @@
 <?php
-    $pagetitle= "commander";
-    include 'fonctions.php';
+    $pageTitle= "Commander";
+    include 'fonctions/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commander</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/commander.css">
     <h1>MENU</h1>
-    <form action="submit">
+
+    <form action="payer.php" method="post">
     <ul>
-        <li>Pizza Bosca(17€)
-        <input type="number" min="0" max="100" step="1" placeholder="0">
+        <li>
+            <span>Pizza Bosca (17€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="0">
         </li>
-        <li>Pizza Full Formaggi (15€)
-        <input type="number" min="0" max="100" step="1" placeholder="0">
+        <li>
+            <span>Pizza Full Formaggi (15€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="0">
         </li>
-        <li>Pizza Basta Cosi (14€)
-        <input type="number" min="0" max="100" step="1" placeholder="2">
+        <li>
+            <span>Pizza Basta Cosi (14€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="2">
         </li>
-        <li>Katsu viande et aubergines (14,90€)
-        <input type="number" min="0" max="100" step="1" placeholder="1">
+        <li>
+            <span>Katsu viande et aubergines (14,90€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="1">
         </li>
-        <li>Katsu poisson et aubergines (12,90€)
-        <input type="number" min="0" max="100" step="1" placeholder="0">
+        <li>
+            <span>Katsu poisson et aubergines (12,90€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="0">
         </li>
-        <li>Coxinhas boeuf (9,90€)
-        <input type="number" min="0" max="100" step="1" placeholder="1">
+        <li>
+            <span>Coxinhas boeuf (9,90€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="1">
         </li>
-        <li>Coxinhas vegan (7,90€)
-        <input type="number" min="0" max="100" step="1" placeholder="1">
+        <li>
+            <span>Coxinhas vegan (7,90€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="1">
         </li>
-        <li>Coxinhas fromage (7,90)
-        <input type="number" min="0" max="100" step="1" placeholder="0">
+        <li>
+            <span>Coxinhas fromage (7,90€)</span>
+            <input type="number" min="0" max="100" step="1" placeholder="0">
         </li>
     </ul>
     <label class="radio-label">
         <input type="radio" name="commande" value="surplace">
-        <span class="custom-radio"></span> Sur place
+        <span class="custom-radio"></span> Sur place<br><br>
         <input type="radio" name="commande" value="emporter">
         <span class="custom-radio"></span> À emporter<br><br>
-        <button type="submit">Commander</button>
-        <a href="accueil.php">Annuler</a>
+        <button type="submit">Commander</button>&nbsp;&nbsp;&nbsp;
+        <a href="index.php">Annuler</a>
     </label>
-    </form>
-</body>
-</html>
+    </form> 
+    <?php include 'fonctions/footer.php'; ?>
