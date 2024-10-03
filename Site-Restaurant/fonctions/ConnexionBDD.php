@@ -77,7 +77,7 @@ class ConnexionBDD
      *   si la méthode retourne NULL c'est que l'utilisateur
      *               n'est pas connecté.
      */
-    function getUserFromSession()
+   function getUserFromSession()
     {
         if (!isset($_SESSION["user"])) {
             return null;
@@ -90,7 +90,7 @@ class ConnexionBDD
             [
                 ":login" => $user["login"],
                 ":password" => $user["password"]
-            ]
+            ] 
         );
 
         if (count($res) == 0)
