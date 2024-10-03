@@ -24,6 +24,7 @@ if (!empty($_POST["login"]) && !empty($_POST["password"])) {
     if ($db->login($login, $mdp)) {
         header("Location: commander.php");
         exit();
+
     } else {
         $erreur = "Login ou mot de passe incorrect.";
     }
