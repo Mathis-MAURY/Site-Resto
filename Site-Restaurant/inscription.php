@@ -1,7 +1,7 @@
 <?php
   $pageTitle = "Inscription";
   include 'fonctions/header.php';
-  include 'fonctions/fonction.php';
+  include 'fonctions/ConnexionBDD.php';
 ?>
 
 <!DOCTYPE html>
