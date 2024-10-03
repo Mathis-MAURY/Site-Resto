@@ -12,6 +12,7 @@
   <title>Accueil</title>
 </head>
 <body>
+  
 <section>
   <h1>Bienvenue</h1>
   <p>Voici notre page d'accueil statique pour le moment, elle sera dynamique plus tard.</p>
