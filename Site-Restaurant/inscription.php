@@ -28,7 +28,7 @@
         
         <p class="separator"></p>
 
-        <label> login</label>
+        <label> Login</label>
         <input type="login" name="login" required value="">
 
         <p class="separator"></p>
