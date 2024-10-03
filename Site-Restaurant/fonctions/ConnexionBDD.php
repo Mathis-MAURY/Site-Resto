@@ -60,6 +60,7 @@ class ConnexionBDD
     public function connect()
     {
         try {
+            // Création de la connexion PDO
             $db = new PDO("mysql:host=$this->host;dbname=$this->dbname;charset=utf8", $this->root, $this->password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $db;
@@ -71,7 +72,6 @@ class ConnexionBDD
             );
         }
     }
-
        /*
      *   Méthode pour récuperer l'utilisateur depuis la session
      *   si la méthode retourne NULL c'est que l'utilisateur

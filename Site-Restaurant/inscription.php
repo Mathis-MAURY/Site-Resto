@@ -45,33 +45,45 @@
     </form>
     <?php 
     
-    // Vérifier si le formulaire a été soumis
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Créer une instance de la classe ConnexionBDD
+$db = new ConnexionBDD();
+
+// Établir la connexion à la base de données
+$pdo = $db->connect();
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Récupérer les données du formulaire
-    $email = $_POST['email'];
-    $login = $_POST['login'];
-    $password = $_POST['password'];
+    $email = $_POST['email'] ?? null; // Utiliser l'opérateur null coalescent
+    $login = $_POST['login'] ?? null;
+    $password = $_POST['password'] ?? null;
 
-    // Hacher le mot de passe pour plus de sécurité
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Vérifier que les champs ne sont pas vides
+    if (!empty($email) && !empty($login) && !empty($password)) {
+        // Hachage du mot de passe
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Préparer la requête SQL avec PDO
-    $sql = "INSERT INTO user (email, login, password) VALUES (:email, :login, :password)";
-    $stmt = $pdo->prepare($sql);  // Utiliser la connexion PDO obtenue
+        try {
+            // Préparer la requête d'insertion
+            $stmt = $pdo->prepare('INSERT INTO user (email, login, password) VALUES (:email, :login, :password)');
 
-    // Lier les paramètres aux valeurs
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-    $stmt->bindParam(':password', $hashed_password, PDO::PARAM_STR);
+            // Lier les paramètres aux valeurs
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $hashed_password, PDO::PARAM_STR);
 
-    // Exécuter la requête et vérifier le succès
-    if ($stmt->execute()) {
-        echo "Inscription réussie !";
+            // Exécuter la requête
+            $stmt->execute();
+
+            echo "Inscription réussie !";
+        } catch (PDOException $e) {
+            echo 'Erreur lors de l\'inscription : ' . $e->getMessage();
+        }
     } else {
-        echo "Erreur lors de l'inscription.";
+        echo 'Veuillez remplir tous les champs.';
     }
 }
-    ?>
+?>
 </body>
 
 </html>
