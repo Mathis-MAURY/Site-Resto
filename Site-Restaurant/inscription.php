@@ -25,17 +25,17 @@
         <p class="separator"></p>
 
         <label> Adresse e-mail </label>
-        <input type="email" name="email" required value="">
+        <input type="email" id="email" name="email" required placeholder="exemple@domaine.com">
         
         <p class="separator"></p>
 
-        <label> Login</label>
-        <input type="login" name="login" required value="">
+        <label>Login</label>
+        <input type="text" id="login" name="login" required placeholder="Votre identifiant">
 
         <p class="separator"></p>
         
-        <label> Mot de passe</label>
-        <input type="password" name="password" required value="">
+        <label>Mot de passe</label>
+        <input type="password" id="password" name="password" required>
         
         <a href="connexion.php" class="sublink">Vous avez déjà un compte ?</a>
         
@@ -43,7 +43,35 @@
         
             <input type="submit" name="submit" value="Inscription">
     </form>
+    <?php 
+    
+    // Vérifier si le formulaire a été soumis
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Récupérer les données du formulaire
+    $email = $_POST['email'];
+    $login = $_POST['login'];
+    $password = $_POST['password'];
 
+    // Hacher le mot de passe pour plus de sécurité
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Préparer la requête SQL avec PDO
+    $sql = "INSERT INTO user (email, login, password) VALUES (:email, :login, :password)";
+    $stmt = $pdo->prepare($sql);  // Utiliser la connexion PDO obtenue
+
+    // Lier les paramètres aux valeurs
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+    $stmt->bindParam(':password', $hashed_password, PDO::PARAM_STR);
+
+    // Exécuter la requête et vérifier le succès
+    if ($stmt->execute()) {
+        echo "Inscription réussie !";
+    } else {
+        echo "Erreur lors de l'inscription.";
+    }
+}
+    ?>
 </body>
 
 </html>

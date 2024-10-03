@@ -7,14 +7,15 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-$messageerreur = "";
-$inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
-unset($_SESSION["inscriptionReussie"]);
 function my_autoloader($c)
 {
     include "assets/functions/$c.php";
 }
 spl_autoload_register('my_autoloader');
+
+$erreur = "";
+$inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
+unset($_SESSION["inscriptionReussie"]);
 
 $user = FALSE;
 
@@ -28,7 +29,7 @@ if (!empty($_POST["login"]) && !empty($_POST["mdp"])) {
     if ($estConnecte) {
         header("Location: commander.php");
     } else {
-        $messageerreur = "Login ou mot de passe incorrect";
+        $erreur = "Login ou mot de passe incorrect";
     }
 }
 ?>
@@ -62,8 +63,12 @@ if (!empty($_POST["login"]) && !empty($_POST["mdp"])) {
         
         <p class="separator"></p>
         
-            <input type="submit" name="submit" value="Connexion">
-    </form>
+        <input type="submit" name="submit" value="Connexion">
+           
+        <?php if (isset($error)) : ?>
+            <p class="error"><?php echo $error; ?></p>
+            <?php endif; ?>
+     </form>
 
 </body>
 
