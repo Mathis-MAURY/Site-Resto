@@ -1,36 +1,36 @@
 <?php
 $pageTitle = "Connexion";
 include 'fonctions/header.php';
-include 'fonctions/fonction.php';
+include 'fonctions/ConnexionBDD.php';
 
-session_start(); // Démarre la session
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-    $dbh = db_connect();
+$messageerreur = "";
+$inscriptionReussie = $_SESSION["inscriptionReussie"] ?? false;
+unset($_SESSION["inscriptionReussie"]);
+function my_autoloader($c)
+{
+    include "assets/functions/$c.php";
+}
+spl_autoload_register('my_autoloader');
 
-    // Récupérer le nom d'utilisateur et le mot de passe
-    $login = $dbh->real_escape_string($_POST['login']);
-    $password = $_POST['password'];
+$user = FALSE;
 
-    // Requête pour récupérer le mot de passe haché
-    $result = $dbh->query("SELECT login FROM user WHERE password = '$password'");
+$db = new ConnexionBDD();
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        // Vérifie le mot de passe
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['login'] = $login; // Stocke le nom d'utilisateur dans la session
-            echo "Connexion réussie !";
-            header("Location: dashboard.php"); // Exemple de redirection
-            exit();
-        } else {
-            echo "Nom d'utilisateur ou mot de passe incorrect.";
-        }
+if (!empty($_POST["login"]) && !empty($_POST["mdp"])) {
+    $login = $_POST["login"];
+    $mdp = $_POST["mdp"];
+
+    $estConnecte = $db->login($login, $mdp);
+    if ($estConnecte) {
+        header("Location: commander.php");
     } else {
-        echo "Nom d'utilisateur ou mot de passe incorrect.";
+        $messageerreur = "Login ou mot de passe incorrect";
     }
-
-    // Fermer la connexion
-    $dbh->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
