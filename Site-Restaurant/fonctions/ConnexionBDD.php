@@ -72,6 +72,29 @@ class ConnexionBDD
             );
         }
     }
+
+    public function login($login, $password): bool
+    {
+        $user = $this->prepareAndFetchOne(
+            "SELECT * FROM user WHERE login = :login",
+            [
+                ':login' => $login
+            ]
+        );
+
+        if($user === false || $user === []){
+            return FALSE;
+        }
+        
+        $passwordHash = $user["password"];
+        if($password == NULL || $passwordHash == NULL){
+            die("One of the passwords is null");
+        }
+        $verification = password_verify($password, $passwordHash);
+        $_SESSION["user"] = $user;
+        return $verification;
+    }
+
        /*
      *   Méthode pour récuperer l'utilisateur depuis la session
      *   si la méthode retourne NULL c'est que l'utilisateur
@@ -106,8 +129,4 @@ class ConnexionBDD
     }
 
 }
-
-
-
-
 ?>
