@@ -27,7 +27,7 @@ if (!empty($_POST["login"]) && !empty($_POST["mdp"])) {
 
     $estConnecte = $db->login($login, $mdp);
     if ($estConnecte) {
-        header("Location: commander.php");
+        header("Location:commander.php");
     } else {
         $erreur = "Login ou mot de passe incorrect";
     }
