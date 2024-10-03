@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Connexion";
+include 'fonctions/header.php';
 
-// Autoload classes
 function my_autoloader($class) {
     include "fonctions/$class.php";
 }
