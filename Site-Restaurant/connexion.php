@@ -52,12 +52,12 @@ if (!empty($_POST["login"]) && !empty($_POST["password"])) {
         <p class="separator"></p>
 
         <label for="login">Login</label>
-        <input type="text" name="login" id="login" required>
+        <input type="text" name="login" id="login" required placeholder="Jack">
 
         <p class="separator"></p>
         
         <label for="password">Mot de passe</label>
-        <input type="password" name="password" id="password" required>
+        <input type="password" name="password" id="password" required placeholder="*******">
         
         <p class="separator"></p>
         
