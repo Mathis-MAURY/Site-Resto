@@ -128,5 +128,77 @@ class ConnexionBDD
         return $res[0];
     }
 
+    public function calculerTotalPanier($panier)
+    {
+        $total = 0;
+        // Si le panier est vide, on retourne 0 pour le total
+        if($panier == NULL || $panier == [] || count($panier) == 0){
+            return $total;
+        }
+        $ids = [];
+        foreach ($panier as $p) {
+            $ids[] = $p["id_produit"];
+        }
+
+        $imploded = implode(",", $ids);
+        
+        $produits = $this->prepareAndFetchAll("SELECT produit.prix_ht, produit.id_produit FROM produit WHERE produit.id_produit IN ($imploded);");
+
+
+        foreach ($produits as $prod) {
+            $prix = $prod["prix_ht"];
+            $id = $prod["id_produit"];
+            $qty = $this->rechercheQuantiteDansPanier($panier, $id);
+
+            if ($qty != -1) {
+                $prix = $qty * $prix;
+                $total += $prix;
+            }
+
+        }
+        return $total;
+    }
+
+    private function rechercheQuantiteDansPanier($panier, $idProduit)
+    {
+        foreach ($panier as $p) {
+            if ($p["id_produit"] == $idProduit)
+                return $p["qty"];
+        }
+
+        return -1;
+    }
+
+    public function insererCommandeEtProduitDepuisPanier($typeConso) {
+        $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
+        
+        $this->prepareAndFetchOne(
+            "INSERT INTO commande(id_user, id_etat, date, total_commande, type_conso) VALUES (:idUser, :idEtat, SYSDATE(), 0, :typeConso)",
+            [
+                ":idUser" => $_SESSION["user"]["id_user"],
+                ":idEtat" => 0,
+                ":typeConso" => $typeConso
+            ]
+        );
+
+        $idCommandeInseree = $this->dbh->lastInsertId();
+
+        foreach($panier as $produit){
+            $idProduit = $produit["id_produit"];
+            $quantite = $produit["qty"];
+
+            $this->prepareAndFetchOne(
+                "INSERT INTO ligne(id_commande, id_produit, qte, total_ligne_ht) VALUES (:idCommande, :idProduit, :qte, :totalHt)",
+                [
+                    ":idCommande" => $idCommandeInseree,
+                    ":idProduit" => $idProduit,
+                    ":qte" => $quantite,
+                    ":totalHt" => 0
+                ]
+            );
+        }
+
+        $_SESSION["idDeCommandeDernierementInseree"] = $idCommandeInseree;
+    }
 }
 ?>

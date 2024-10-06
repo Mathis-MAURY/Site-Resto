@@ -1,5 +1,4 @@
 <?php
-  include 'fonctions/header.php';
   if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
@@ -15,7 +14,6 @@ $connexionBDD = new ConnexionBDD();
 $plats = $connexionBDD->prepareAndFetchAll(
     "SELECT * FROM produit"
 );
-$panier = json_decode($_COOKIE["panier"] ?? "[]", true);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -24,15 +22,14 @@ $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Fée - Restaurant de mafé</title>
-    <link rel="stylesheet" href="assets/css/index.css">
+    <title>Flushmeal</title>
+    <link rel="stylesheet" href="css/commander.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <header>
-        <img src="assets/images/log.png" class="logo">
+<header>
+        <img src="images/FLASHMEAL.jpg" class="logo">
     </header>
     <aside id="profile">
         <div class="head">
@@ -156,8 +153,8 @@ $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
             </div>
         </div>
     </div>
-    <script src="assets/js/profileModule.js"></script>
-    <script src="assets/js/panier.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/panier.js"></script>
 </body>
 
 </html>

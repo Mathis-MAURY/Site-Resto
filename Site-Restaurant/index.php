@@ -12,14 +12,10 @@
   <title>Accueil</title>
 </head>
 <body>
-  <img src="img/LOGO.png" alt="LOGO">
+  <img src="images/FLASHMEAL.jpg" alt="LOGO">
 <section>
-  <h1>Bienvenue</h1>
-  <p>Voici notre page d'accueil statique pour le moment, elle sera dynamique plus tard.</p>
+  <h1>Bienvenue sur <span style="color: #00A45B;">FlashMeal</span></h1>
 </section>
-
-<a href="commander.php" class="button">Faites une commande !</a><br><br>
-<a href="deconnexion.php" class="button">Se deconnecter !</a><br><br>
 
 <?php include 'fonctions/footer.php'; ?>
 </body>
