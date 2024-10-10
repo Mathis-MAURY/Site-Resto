@@ -53,7 +53,7 @@ INSERT INTO `commande` (`id_commande`, `id_user`, `id_etat`, `date`, `total_comm
 -- Structure de la table `ligne`
 --
 
-CREATE TABLE `ligne` (
+CREATE TABLE `ligne_commande` (
   `id_ligne` int(11) NOT NULL,
   `id_commande` int(11) NOT NULL,
   `id_produit` int(11) NOT NULL,
@@ -76,68 +76,146 @@ INSERT INTO `ligne` (`id_ligne`, `id_commande`, `id_produit`, `qte`, `total_lign
 (24, 8, 2, 1, 14.00),
 (25, 8, 5, 1, 7.50);
 
---
--- Déclencheurs `ligne`
---
 DELIMITER |
-CREATE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne` FOR EACH ROW BEGIN
-    set @total_commande = 0;
-    set @type_conso = 0;
-    set @tva = 0;
-    -- Lit la commande
-    SELECT type_conso INTO @type_conso FROM commande where commande.id_commande = NEW.id_commande;
-    -- Détermine le taux de TVA
-    IF @type_conso=1 THEN SET @tva=1.055; END IF;
-    IF @type_conso=2 THEN SET @tva=1.1; END IF;
-    -- Calcule le total HT des lignes de la commande
-    SELECT sum(total_ligne_ht) INTO @total_commande FROM ligne WHERE ligne.id_commande = NEW.id_commande;
-    -- Calcule le total TTC
-    SET @total_commande=@total_commande*@tva;
-    --  Met à jour le total commande 
-    UPDATE commande SET total_commande=@total_commande where commande.id_commande = NEW.id_commande;
-  END |
+
+CREATE TRIGGER `before_ligne_insert` 
+BEFORE INSERT ON `ligne_commande`
+FOR EACH ROW 
+BEGIN
+    DECLARE prix_ht DECIMAL(10, 2);
+    
+    -- Récupérer le prix HT du produit
+    SELECT p.prix_ht 
+    INTO prix_ht 
+    FROM produit p 
+    WHERE p.id_produit = NEW.id_produit;
+
+    -- Vérifier si le prix HT a été trouvé
+    IF prix_ht IS NULL THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Produit non trouvé ou prix hors taxes non défini.';
+    ELSE
+        -- Calculer le total ligne HT
+        SET NEW.total_ligne_ht = COALESCE(prix_ht, 0) * NEW.qte;
+    END IF;
+
+    -- Vérifier si la quantité est positive
+    IF NEW.qte <= 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
+    END IF;
+END |
 DELIMITER ;
 
-DELIMITER |
-CREATE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne` FOR EACH ROW BEGIN
-    set @total_commande = 0;
-    set @type_conso = 0;
-    set @tva = 0;
-    -- Lit la commande
-    SELECT type_conso INTO @type_conso FROM commande where commande.id_commande = NEW.id_commande;
-    -- Détermine le taux de TVA
-    IF @type_conso=1 THEN SET @tva=1.055; END IF;
-    IF @type_conso=2 THEN SET @tva=1.1; END IF;
-    -- Calcule le total HT des lignes de la commande
-    SELECT sum(total_ligne_ht) INTO @total_commande FROM ligne WHERE ligne.id_commande = NEW.id_commande;
-    -- Calcule le total TTC
-    SET @total_commande=@total_commande*@tva;
-    --  Met à jour le total commande 
-    UPDATE commande SET total_commande=@total_commande where commande.id_commande = NEW.id_commande;
-  END |
-DELIMITER ;
 
 DELIMITER |
-CREATE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne` FOR EACH ROW BEGIN
-    set @prix_ht = 0;
-    -- Lit le prix du produit
-    SELECT prix_ht INTO @prix_ht FROM produit WHERE produit.id_produit = NEW.id_produit; 
-    --  Calcule le total ligne 
-    SET NEW.total_ligne_ht = @prix_ht * NEW.qte;
-  END |
+CREATE TRIGGER `before_ligne_update` 
+BEFORE UPDATE ON `ligne_commande`
+FOR EACH ROW 
+BEGIN
+    DECLARE prix_ht DECIMAL(10, 2); -- Déclaration d'une variable locale pour le prix HT
+
+    -- Récupérer le prix HT du produit
+    SELECT p.prix_ht 
+    INTO prix_ht 
+    FROM produit p 
+    WHERE p.id_produit = NEW.id_produit;
+
+    -- Vérifier si le prix HT a été trouvé
+    IF prix_ht IS NULL THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Produit non trouvé ou prix hors taxes non défini.';
+    ELSE
+        -- Calculer le total ligne HT
+        SET NEW.total_ligne_ht = COALESCE(prix_ht, 0) * NEW.qte;
+    END IF;
+
+    -- Vérifier si la quantité est positive
+    IF NEW.qte <= 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
+    END IF;
+
+END |
 DELIMITER ;
+
 
 DELIMITER |
-CREATE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne` FOR EACH ROW BEGIN
-    set @prix_ht = 0;
-    -- Lit le prix du produit
-    SELECT prix_ht INTO @prix_ht FROM produit WHERE produit.id_produit = NEW.id_produit; 
-    --  Calcule le total ligne 
-    SET NEW.total_ligne_ht = @prix_ht * NEW.qte;
-  END |
+CREATE TRIGGER `after_ligne_insert` 
+AFTER INSERT ON `ligne_commande`
+FOR EACH ROW 
+BEGIN
+    DECLARE total_commande DECIMAL(10, 2) DEFAULT 0;
+    DECLARE type_conso INT DEFAULT 0;
+    DECLARE tva DECIMAL(3, 3) DEFAULT 0;
+
+    -- Récupérer le type de consommation
+    SELECT c.type_conso 
+    INTO type_conso 
+    FROM commande c 
+    WHERE c.id_commande = NEW.id_commande;
+
+    -- Déterminer le taux de TVA
+    IF type_conso = 1 THEN 
+        SET tva = 1.055; 
+    ELSEIF type_conso = 2 THEN 
+        SET tva = 1.1; 
+    END IF;
+
+    -- Calculer le total HT des lignes de la commande
+    SELECT COALESCE(SUM(total_ligne_ht), 0) 
+    INTO total_commande 
+    FROM ligne_commande 
+    WHERE id_commande = NEW.id_commande;
+
+    -- Calculer le total TTC
+    SET total_commande = total_commande * tva;
+
+    -- Mettre à jour le total de la commande
+    UPDATE commande 
+    SET total_commande = total_commande 
+    WHERE id_commande = NEW.id_commande;
+END |
 DELIMITER ;
 
--- --------------------------------------------------------
+
+DELIMITER |
+CREATE TRIGGER `after_ligne_update` 
+AFTER UPDATE ON `ligne_commande` 
+FOR EACH ROW 
+BEGIN
+    DECLARE total_commande DECIMAL(10, 2) DEFAULT 0;
+    DECLARE type_conso INT DEFAULT 0;
+    DECLARE tva DECIMAL(3, 3) DEFAULT 0;
+
+    -- Récupérer le type de consommation
+    SELECT c.type_conso 
+    INTO type_conso 
+    FROM commande c 
+    WHERE c.id_commande = NEW.id_commande;
+
+    -- Déterminer le taux de TVA
+    IF type_conso = 1 THEN 
+        SET tva = 1.055; 
+    ELSEIF type_conso = 2 THEN 
+        SET tva = 1.1; 
+    END IF;
+
+    -- Calculer le total HT des lignes de la commande
+    SELECT COALESCE(SUM(total_ligne_ht), 0) 
+    INTO total_commande 
+    FROM ligne_commande 
+    WHERE id_commande = NEW.id_commande;
+
+    -- Calculer le total TTC
+    SET total_commande = total_commande * tva;
+
+    -- Mettre à jour le total de la commande
+    UPDATE commande 
+    SET total_commande = total_commande 
+    WHERE id_commande = NEW.id_commande;
+END |
+DELIMITER ;
 
 --
 -- Structure de la table `produit`
