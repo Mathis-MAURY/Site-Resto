@@ -7,7 +7,7 @@ body {
     align-items: center;
     min-height: 100vh;
     background-color: #f4f4f4;
-    padding-top: 120px;
+    padding-top: 1%;/*Pour que ca colle au max*/
     /* Pour que le contenu ne soit pas caché par le header */
 }
 
@@ -37,15 +37,17 @@ p {
 }
 
 /* Ajout d'un espace avant et après le header */
+/* Suppression des marges verticales autour du header */
 header {
     background-color: black;
-    padding: 20px 0;
+    padding: 20px 0; /* Tu peux ajuster le padding vertical si tu veux moins d'espace */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
+    margin: 0; /* Supprime les marges */
 }
 
 nav {
@@ -79,7 +81,10 @@ nav ul li a:hover {
 }
 
 .logo {
-    display: block; /* Pour que l'image soit traitée comme un bloc */
-    margin: 0 auto; /* Pour centrer l'image horizontalement */
-    width: 35%; /* Pour définir la largeur de l'image à 30% */
+    display: block;
+    width: 100%;
+    height: auto; /* Garde le ratio de l'image */
+    margin: 0; 
+    padding: 0;
+    
 }
