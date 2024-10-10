@@ -24,10 +24,12 @@ if (isset($_POST["submit"])) {
         $messageErreur = "Le cryptogramme doit faire 3 caractères de long.";
     }
     
-    if ($carte == NULL || mb_strlen($carte) != 16) {
+    //str_replace(' ', '', $carte): Cela supprime tous les espaces du numéro de carte, vous permettant de vérifier la longueur correcte sans tenir compte des espaces.
+    if ($carte == NULL || mb_strlen(str_replace(' ', '', $carte)) != 16) {
         $messageErreur = "Le numéro de la carte doit faire 16 caractères de long.";
     }
     
+
     if ($nom == NULL || mb_strlen($nom) < 3) {
         $messageErreur = "Le nom doit faire plus de 3 caractères de longueur";
     }
