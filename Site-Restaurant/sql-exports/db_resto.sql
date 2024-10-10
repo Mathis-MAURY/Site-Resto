@@ -53,7 +53,7 @@ INSERT INTO `commande` (`id_commande`, `id_user`, `id_etat`, `date`, `total_comm
 -- Structure de la table `ligne`
 --
 
-CREATE TABLE `ligne_commande` (
+CREATE TABLE `ligne` (
   `id_ligne` int(11) NOT NULL,
   `id_commande` int(11) NOT NULL,
   `id_produit` int(11) NOT NULL,
@@ -80,7 +80,7 @@ INSERT INTO `ligne` (`id_ligne`, `id_commande`, `id_produit`, `qte`, `total_lign
 DELIMITER |
 
 CREATE TRIGGER `before_ligne_insert` 
-BEFORE INSERT ON `ligne_commande`
+BEFORE INSERT ON `ligne`
 FOR EACH ROW 
 BEGIN
     DECLARE prix_ht DECIMAL(10, 2);
@@ -111,7 +111,7 @@ DELIMITER ;
 
 DELIMITER |
 CREATE TRIGGER `before_ligne_update` 
-BEFORE UPDATE ON `ligne_commande`
+BEFORE UPDATE ON `ligne`
 FOR EACH ROW 
 BEGIN
     DECLARE prix_ht DECIMAL(10, 2); -- Déclaration d'une variable locale pour le prix HT
@@ -142,7 +142,7 @@ DELIMITER ;
 
 DELIMITER |
 CREATE TRIGGER `after_ligne_insert` 
-AFTER INSERT ON `ligne_commande`
+AFTER INSERT ON `ligne`
 FOR EACH ROW 
 BEGIN
     DECLARE total_commande DECIMAL(10, 2) DEFAULT 0;
@@ -165,7 +165,7 @@ BEGIN
     -- Calculer le total HT des lignes de la commande
     SELECT COALESCE(SUM(total_ligne_ht), 0) 
     INTO total_commande 
-    FROM ligne_commande 
+    FROM ligne 
     WHERE id_commande = NEW.id_commande;
 
     -- Calculer le total TTC
@@ -181,7 +181,7 @@ DELIMITER ;
 
 DELIMITER |
 CREATE TRIGGER `after_ligne_update` 
-AFTER UPDATE ON `ligne_commande` 
+AFTER UPDATE ON `ligne` 
 FOR EACH ROW 
 BEGIN
     DECLARE total_commande DECIMAL(10, 2) DEFAULT 0;
@@ -204,7 +204,7 @@ BEGIN
     -- Calculer le total HT des lignes de la commande
     SELECT COALESCE(SUM(total_ligne_ht), 0) 
     INTO total_commande 
-    FROM ligne_commande 
+    FROM ligne 
     WHERE id_commande = NEW.id_commande;
 
     -- Calculer le total TTC

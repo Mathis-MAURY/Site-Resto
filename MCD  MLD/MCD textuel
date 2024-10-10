@@ -1,4 +1,0 @@
-produit = (id_produit INT, libelle VARCHAR(50), __prix_ht DECIMAL(10,2), imageUrl VARCHAR(50));
-user_ = (id_user INT, login VARCHAR(100), email VARCHAR(100), password VARCHAR(255));
-commande = (id_commande INT, __id_user INT, __id_etat VARCHAR(50), date_ DATETIME, __total_commande DECIMAL(10,2), __type_conso VARCHAR(50), #id_user);
-Ligne = (id_ligne INT, __id_produit INT, __id_commande INT, __qte INT, __total_ligne_ht DECIMAL(10,2), #id_commande, #id_produit);
