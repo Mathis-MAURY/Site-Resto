@@ -76,6 +76,7 @@ INSERT INTO `ligne` (`id_ligne`, `id_commande`, `id_produit`, `qte`, `total_lign
 (24, 8, 2, 1, 14.00),
 (25, 8, 5, 1, 7.50);
 
+    -- Création des triggers
 DELIMITER |
 
 CREATE TRIGGER `before_ligne_insert` 
@@ -135,7 +136,6 @@ BEGIN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
     END IF;
-
 END |
 DELIMITER ;
 
