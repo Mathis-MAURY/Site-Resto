@@ -3,10 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
-<<<<<<< HEAD:Site-Restaurant/sql-exports/db_resto.sql
-=======
 -- Généré le : jeu. 3 oct. 2023 à 10:45
->>>>>>> 7f0017708c1390cc44f7324aac5d4b195d0217fa:MCD  MLD MPD/db_restoweb.sql
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
