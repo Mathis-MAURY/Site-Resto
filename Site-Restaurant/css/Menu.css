@@ -1,0 +1,68 @@
+/* Style de base pour le corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+/* Conteneur principal */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux éléments de se répartir sur plusieurs lignes */
+    justify-content: center; /* Centre les éléments horizontalement */
+    padding: 10% 20%; /* 15% en haut et en bas, 10% à droite et à gauche */
+    box-sizing: border-box; /* Inclut les bordures et le padding dans la largeur totale */
+}
+
+.item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 15px; /* Marge autour de chaque élément */
+    padding: 15px;
+    width: calc(50% - 30px); /* Prend 50% de la largeur moins les marges */
+    max-width: 250px; /* Limite la largeur maximale pour garder un format agréable */
+    text-align: center; /* Centre le texte à l'intérieur de chaque élément */
+}
+
+/* Style de l'image du plat */
+.item img.preview {
+    max-width: 100%; /* S'assure que l'image ne dépasse pas la largeur de son conteneur */
+    border-radius: 8px; /* Bords arrondis pour l'image */
+}
+
+/* Style pour le nom du plat */
+.name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Style pour le prix */
+.bottom .price {
+    font-weight: bold;
+    color: #4CAF50; /* Couleur verte pour le prix */
+}
+
+/* Style pour le bouton d'ajout au panier */
+.ajoutPanier {
+    background-color: #4CAF50; /* Couleur verte */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Transition pour l'effet de survol */
+}
+
+.ajoutPanier:hover {
+    background-color: #45a049; /* Couleur de fond au survol */
+}
+
+/* Style pour les descriptions (actuellement vide) */
+.description {
+    font-size: 0.9em;
+    color: #666; /* Couleur grise pour la description */
+    margin: 5px 0;
+}
