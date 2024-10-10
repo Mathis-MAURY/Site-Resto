@@ -1,13 +1,16 @@
 <?php
 session_start();
 
-function deconnexion()
-{
-    session_unset();
-    session_destroy();
-    setcookie('email', '', time() - 3600);
-    setcookie('password', '', time() - 3600);
-    header('Location: index.php');
-}
+// Vider le panier de la session (si vous l'avez stocké)
+unset($_SESSION['panier']);
 
-deconnexion();
+// Supprimer le cookie du panier
+setcookie("panier", "", time() - 3600, "/"); // On définit un cookie avec une date d'expiration dans le passé
+
+// Détruire la session
+session_destroy();
+
+// Rediriger vers la page de connexion ou la page d'accueil
+header("Location: index.php");
+exit();
+?>
