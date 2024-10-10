@@ -24,7 +24,7 @@ if (isset($_POST["submit"])) {
         $messageErreur = "Le cryptogramme doit faire 3 caractères de long.";
     }
 
-    if ($carte == NULL || mb_strlen($carte) != 19) {
+    if ($carte == NULL || mb_strlen($carte) != 16) {
         $messageErreur = "Le numéro de la carte doit faire 16 caractères de long.";
     }
 
