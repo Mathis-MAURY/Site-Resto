@@ -45,24 +45,17 @@ body {
     color: #4CAF50; /* Couleur verte pour le prix */
 }
 
-/* Style pour le bouton d'ajout au panier */
-.ajoutPanier {
-    background-color: #4CAF50; /* Couleur verte */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s; /* Transition pour l'effet de survol */
-}
-
-.ajoutPanier:hover {
-    background-color: #45a049; /* Couleur de fond au survol */
-}
-
 /* Style pour les descriptions (actuellement vide) */
 .description {
     font-size: 0.9em;
     color: #666; /* Couleur grise pour la description */
     margin: 5px 0;
+}
+
+.preview {
+    width: 100%; /* Prend toute la largeur du conteneur */
+    height: 150px; /* Définit une hauteur fixe */
+    object-fit: cover; /* S'assure que l'image remplit le conteneur sans déformer le ratio */
+    border-radius: 8px; /* Bords arrondis, si désiré */
+    margin-bottom: -15%; /* Réduit l'espace sous l'image */
 }
