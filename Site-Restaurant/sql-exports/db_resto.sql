@@ -79,7 +79,7 @@ INSERT INTO `ligne` (`id_ligne`, `id_commande`, `id_produit`, `qte`, `total_lign
 --
 -- Déclencheurs `ligne`
 --
-DELIMITER $$
+DELIMITER |
 CREATE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne` FOR EACH ROW BEGIN
     set @total_commande = 0;
     set @type_conso = 0;
@@ -95,10 +95,10 @@ CREATE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne` FOR EACH ROW BEGIN
     SET @total_commande=@total_commande*@tva;
     --  Met à jour le total commande 
     UPDATE commande SET total_commande=@total_commande where commande.id_commande = NEW.id_commande;
-  END
-$$
+  END |
 DELIMITER ;
-DELIMITER $$
+
+DELIMITER |
 CREATE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne` FOR EACH ROW BEGIN
     set @total_commande = 0;
     set @type_conso = 0;
@@ -114,28 +114,27 @@ CREATE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne` FOR EACH ROW BEGIN
     SET @total_commande=@total_commande*@tva;
     --  Met à jour le total commande 
     UPDATE commande SET total_commande=@total_commande where commande.id_commande = NEW.id_commande;
-  END
-$$
+  END |
 DELIMITER ;
-DELIMITER $$
+
+DELIMITER |
 CREATE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne` FOR EACH ROW BEGIN
     set @prix_ht = 0;
     -- Lit le prix du produit
     SELECT prix_ht INTO @prix_ht FROM produit WHERE produit.id_produit = NEW.id_produit; 
     --  Calcule le total ligne 
     SET NEW.total_ligne_ht = @prix_ht * NEW.qte;
-  END
-$$
+  END |
 DELIMITER ;
-DELIMITER $$
+
+DELIMITER |
 CREATE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne` FOR EACH ROW BEGIN
     set @prix_ht = 0;
     -- Lit le prix du produit
     SELECT prix_ht INTO @prix_ht FROM produit WHERE produit.id_produit = NEW.id_produit; 
     --  Calcule le total ligne 
     SET NEW.total_ligne_ht = @prix_ht * NEW.qte;
-  END
-$$
+  END |
 DELIMITER ;
 
 -- --------------------------------------------------------
