@@ -116,7 +116,7 @@ $plats = $connexionBDD->prepareAndFetchAll(
             $id = $plat["id_produit"];
             $libelle = $plat["libelle"];
             $prix = $plat["prix_ht"];
-            $imageUrl = $plat["imageUrl"];
+            $imageUrl = $plat["imageurl"];
             echo "
                 <div class=\"item\" data-item-id=\"$id\">
                 <img src=\"$imageUrl\" class=\"preview\">
