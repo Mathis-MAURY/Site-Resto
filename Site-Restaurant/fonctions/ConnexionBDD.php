@@ -20,7 +20,7 @@ class ConnexionBDD
         $this->dbh = $this->connect();
     }
 
-     /*
+    /*
      * Méthode qui permet de préparer et d'éxcuter une requête
      */
     function prepareAndFetchAll($sql, $params = [])
@@ -66,9 +66,9 @@ class ConnexionBDD
             return $db;
         } catch (PDOException $e) {
             die(
-            "<b>Une erreur est survenue lors de la connexion à MYSQL !</b><br><br><u>" .
-            $e->getMessage() .
-            "</u>"
+                "<b>Une erreur est survenue lors de la connexion à MYSQL !</b><br><br><u>" .
+                $e->getMessage() .
+                "</u>"
             );
         }
     }
@@ -82,12 +82,12 @@ class ConnexionBDD
             ]
         );
 
-        if($user === false || $user === []){
+        if ($user === false || $user === []) {
             return FALSE;
         }
-        
+
         $passwordHash = $user["password"];
-        if($password == NULL || $passwordHash == NULL){
+        if ($password == NULL || $passwordHash == NULL) {
             die("One of the passwords is null");
         }
         $verification = password_verify($password, $passwordHash);
@@ -95,12 +95,12 @@ class ConnexionBDD
         return $verification;
     }
 
-       /*
+    /*
      *   Méthode pour récuperer l'utilisateur depuis la session
      *   si la méthode retourne NULL c'est que l'utilisateur
      *               n'est pas connecté.
      */
-   function getUserFromSession()
+    function getUserFromSession()
     {
         if (!isset($_SESSION["user"])) {
             return null;
@@ -113,7 +113,7 @@ class ConnexionBDD
             [
                 ":login" => $user["login"],
                 ":password" => $user["password"]
-            ] 
+            ]
         );
 
         if (count($res) == 0)
@@ -132,7 +132,7 @@ class ConnexionBDD
     {
         $total = 0;
         // Si le panier est vide, on retourne 0 pour le total
-        if($panier == NULL || $panier == [] || count($panier) == 0){
+        if ($panier == NULL || $panier == [] || count($panier) == 0) {
             return $total;
         }
         $ids = [];
@@ -141,7 +141,7 @@ class ConnexionBDD
         }
 
         $imploded = implode(",", $ids);
-        
+
         $produits = $this->prepareAndFetchAll("SELECT produit.prix_ht, produit.id_produit FROM produit WHERE produit.id_produit IN ($imploded);");
 
 
@@ -169,9 +169,10 @@ class ConnexionBDD
         return -1;
     }
 
-    public function insererCommandeEtProduitDepuisPanier($typeConso) {
+    public function insererCommandeEtProduitDepuisPanier($typeConso)
+    {
         $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
-        
+
         $this->prepareAndFetchOne(
             "INSERT INTO commande(id_user, id_etat, date, total_commande, type_conso) VALUES (:idUser, :idEtat, SYSDATE(), 0, :typeConso)",
             [
@@ -183,7 +184,7 @@ class ConnexionBDD
 
         $idCommandeInseree = $this->dbh->lastInsertId();
 
-        foreach($panier as $produit){
+        foreach ($panier as $produit) {
             $idProduit = $produit["id_produit"];
             $quantite = $produit["qty"];
 

@@ -1,32 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600;700&family=Poppins:wght@200;300;400;500&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-/*Scroll bar CSS*/
-::-webkit-scrollbar {
-    width: 9px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 6px;
-}
-
-/* Ajout d'un espace avant et après le header */
-header {
-    background-color: black;
-    padding: 20px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
+/* Style du body pour centrer le contenu */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding-top: 15px;
+    /* Pour que le contenu ne soit pas caché par le header */
 }
 
 /* Navigation menu */
