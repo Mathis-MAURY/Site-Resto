@@ -29,7 +29,8 @@ $plats = $connexionBDD->prepareAndFetchAll(
 </head>
 <body>
 <header>
-        <img src="images/FLASHMEAL.jpg" class="logo">
+        <a href="index.php"><img class="retour" src="images/RETOUR.png" alt="Retour à la page d'accueil"></a>
+        <img class="logo" src="images/FLASHMEAL.jpg">
     </header>
     <aside id="profile">
         <div class="head">
