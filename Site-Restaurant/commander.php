@@ -121,7 +121,7 @@ $plats = $connexionBDD->prepareAndFetchAll(
             echo "
                 <div class=\"item\" data-item-id=\"$id\">
                 <img src=\"$imageUrl\" class=\"preview\">
-                <div class=\"content\">
+                <div class=\"content\">   
                         <p class=\"name\">$libelle</p>
                         <p class=\"description\"></p>
 
