@@ -1,3 +1,5 @@
+/* Premier TRIGGER Organiser */
+
 DELIMITER |
 CREATE OR REPLACE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne`
  FOR EACH ROW BEGIN
@@ -23,6 +25,8 @@ CREATE OR REPLACE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne`
         SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
     END IF;
 END |
+
+/* Deuxieme TRIGGER Organiser */
 
 DELIMITER |
 CREATE OR REPLACE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne`
@@ -50,6 +54,8 @@ CREATE OR REPLACE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne`
         SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
     END IF;
 END |
+
+/* Troisieme TRIGGER Organiser */
 
 DELIMITER |
 CREATE OR REPLACE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne`
@@ -85,6 +91,8 @@ CREATE OR REPLACE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne`
     SET total_commande = total_commande 
     WHERE id_commande = NEW.id_commande;
 END |
+
+/* Quatrieme TRIGGER Organiser */
 
 DELIMITER |
 CREATE OR REPLACE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne`
@@ -139,51 +147,3 @@ BEGIN
             -- Mettre à jour le total de la commande
             UPDATE           COMMANDE SET TOTAL_COMMANDE = TOTALTTC WHERE COMMANDE.ID_COMMANDE = NEW.ID_COMMANDE;
             END$$            DELIMITER;
-
-/* Deuxieme TRIGGER ORGANISER */
-
-            DELIMITER        $$ CREATE TRIGGER `AFTER_UPDATE_LIGNE` AFTER UPDATE ON `LIGNE` FOR EACH ROW BEGIN DECLARE TOTALTTC DECIMAL(10, 2) DEFAULT 0;
-            DECLARE          CONSOMMATIONTYPE INT DEFAULT 0;
-            DECLARE          TVARATE DECIMAL(5, 3) DEFAULT 1.000;
- 
-            -- Obtenir le type de consommation de la commande
-            SELECT           TYPE_CONSO INTO CONSOMMATIONTYPE FROM COMMANDE WHERE COMMANDE.ID_COMMANDE = NEW.ID_COMMANDE;
- 
-            -- Appliquer le taux de TVA en fonction du type de consommation
-            IF               CONSOMMATIONTYPE = 1 THEN
-                SET TVARATE = 1.055;
-                ELSEIF           CONSOMMATIONTYPE = 2 THEN
-                    SET TVARATE = 1.100;
-                END IF;
- 
-                -- Calculer le total HT des lignes de la commande
-                SELECT           SUM(TOTAL_LIGNE_HT) INTO TOTALTTC FROM LIGNE WHERE LIGNE.ID_COMMANDE = NEW.ID_COMMANDE;
- 
-                -- Calculer le total TTC
-                SET              TOTALTTC = TOTALTTC * TVARATE;
- 
-                -- Mettre à jour le total de la commande
-                UPDATE           COMMANDE SET TOTAL_COMMANDE = TOTALTTC WHERE COMMANDE.ID_COMMANDE = NEW.ID_COMMANDE;
-                END$$            DELIMITER;
-
-/* Troisieme TRIGGER ORGANISER */
-
-    -- Calculer le total TTC
-    SET total_commande = total_commande * tva;
-
-    -- Mettre à jour le total de la commande
-    UPDATE commande 
-    SET total_commande = total_commande 
-    WHERE id_commande = NEW.id_commande;
-END |
-
-/* Quatrieme TRIGGER ORGANISER */
-
-                DELIMITER        $$ CREATE TRIGGER `BEFORE_UPDATE_LIGNE` BEFORE UPDATE ON `LIGNE` FOR EACH ROW BEGIN DECLARE PRIXPRODUITHT DECIMAL(10, 2) DEFAULT 0;
- 
-                -- Obtenir le prix HT du produit
-                SELECT           PRIX_HT INTO PRIXPRODUITHT FROM PRODUIT WHERE PRODUIT.ID_PRODUIT = NEW.ID_PRODUIT;
- 
-                -- Calculer le total HT de la ligne
-                SET              NEW.TOTAL_LIGNE_HT = PRIXPRODUITHT * NEW.QTE;
-                END$$            DELIMITER;
