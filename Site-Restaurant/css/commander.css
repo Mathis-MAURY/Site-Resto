@@ -9,25 +9,26 @@ body {
     min-height: 100vh;
 }
 
-header {
-    /* Taille du header = taille de l'écran (100vw) - 200px (taille du panier)*/
-    width: calc(100vw - 200px);
-
-    /* Hauteur du header = 80px; */
-    height: 80px;
-
+header { 
+    width: 100%;
+    height: 85px;
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    padding: 0 1rem;
-
+    padding: 0 1rem; /* Espace intérieur */
     position: fixed;
-    backdrop-filter: blur(5px);
-    top: 0;
+    backdrop-filter: blur(5px); /* Flou en arrière-plan */
 }
+
+.retour {
+    width: 45px;
+    margin-right: 10%; /* Espace entre le retour et le logo pour les petits écrans */
+}
+
+.logo {
+    max-width: 100px;
+    height: auto;
+}
+
 
 aside#cart {
     /* Taile du panier = 200px */
@@ -65,17 +66,10 @@ aside#cart p.title {
     text-align: center;
 }
 
-img.logo {
-    /* */
-    height: 100%;
-}
-
 #profile {
     width: 250px;
     height: 40px;
-
     background: white;
-
     position: fixed;
     left: calc(100% - 310px);
     top: 20px;
