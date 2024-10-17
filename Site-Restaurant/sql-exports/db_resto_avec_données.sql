@@ -21,26 +21,17 @@ SET time_zone = "+00:00";
 
 /*!40101 SET NAMES utf8mb4 */;
 
---
 -- Base de données : `db_restoweb`
---
+USE `db_restoweb`;
 
-USE `DB_RESTOWEB`;
-
--- --------------------------------------------------------
-
-
---
 -- Déchargement des données de la table `commande`
---
-
-INSERT INTO `COMMANDE` (
-    `ID_COMMANDE`,
-    `ID_USER`,
-    `ID_ETAT`,
-    `DATE`,
-    `TOTAL_COMMANDE`,
-    `TYPE_CONSO`
+INSERT INTO `commande` (
+    `id_commande`,
+    `id_user`,
+    `id_etat`,
+    `date`,
+    `total_commande`,
+    `type_conso`
 ) VALUES (
     6,
     8,
@@ -66,18 +57,13 @@ INSERT INTO `COMMANDE` (
     1
 );
 
-
-
---
 -- Déchargement des données de la table `ligne`
---
-
-INSERT INTO `LIGNE` (
-    `ID_LIGNE`,
-    `ID_COMMANDE`,
-    `ID_PRODUIT`,
-    `QTE`,
-    `TOTAL_LIGNE_HT`
+INSERT INTO `ligne` (
+    `id_ligne`,
+    `id_commande`,
+    `id_produit`,
+    `qte`,
+    `total_ligne_ht`
 ) VALUES (
     17,
     6,
@@ -142,26 +128,21 @@ INSERT INTO `LIGNE` (
     7.50
 );
 
--- --------------------------------------------------------
-
---
 -- Déchargement des données de la table `produit`
---
-
-INSERT INTO `PRODUIT` (
-    `ID_PRODUIT`,
-    `LIBELLE`,
-    `PRIX_HT`,
-    `IMAGEURL`
+INSERT INTO `produit` (
+    `id_produit`,
+    `libelle`,
+    `prix_ht`,
+    `imageurl`
 ) VALUES (
     1,
-    'pizza Margherita',
+    'pizza margherita',
     12.50,
     'https://img.passeportsante.net/1200x675/2022-09-23/shutterstock-2105210927.webp'
 ),
 (
     2,
-    'pizza Chorizo',
+    'pizza chorizo',
     14.00,
     'https://www.galbani.fr/wp-content/uploads/2017/07/Image7.jpg'
 ),
@@ -208,16 +189,12 @@ INSERT INTO `PRODUIT` (
     'https://brigade-hocare.com/info/wp-content/uploads/2022/10/portion-de-frites.jpg'
 );
 
--- --------------------------------------------------------
---
 -- Déchargement des données de la table `user`
---
-
-INSERT INTO `USER` (
-    `ID_USER`,
-    `LOGIN`,
-    `PASSWORD`,
-    `EMAIL`
+INSERT INTO `user` (
+    `id_user`,
+    `login`,
+    `password`,
+    `email`
 ) VALUES (
     1,
     'jef',
