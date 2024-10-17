@@ -24,24 +24,11 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `db_restoweb`
 --
-CREATE DATABASE IF NOT EXISTS `DB_RESTOWEB` DEFAULT CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
 
 USE `DB_RESTOWEB`;
 
 -- --------------------------------------------------------
 
---
--- Structure de la table `commande`
---
-
-CREATE TABLE `COMMANDE` (
-    `ID_COMMANDE` INT(11) NOT NULL,
-    `ID_USER` INT(11) NOT NULL,
-    `ID_ETAT` INT(11) NOT NULL,
-    `DATE` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    `TOTAL_COMMANDE` DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
-    `TYPE_CONSO` TINYINT(1) NOT NULL
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI;
 
 --
 -- Déchargement des données de la table `commande`
@@ -79,17 +66,7 @@ INSERT INTO `COMMANDE` (
     1
 );
 
---
--- Structure de la table `ligne`
---
 
-CREATE TABLE `LIGNE` (
-    `ID_LIGNE` INT(11) NOT NULL,
-    `ID_COMMANDE` INT(11) NOT NULL,
-    `ID_PRODUIT` INT(11) NOT NULL,
-    `QTE` INT(11) NOT NULL DEFAULT 0,
-    `TOTAL_LIGNE_HT` DECIMAL(10, 2) NOT NULL DEFAULT 0.00
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI;
 
 --
 -- Déchargement des données de la table `ligne`
@@ -168,17 +145,6 @@ INSERT INTO `LIGNE` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `produit`
---
-
-CREATE TABLE `PRODUIT` (
-    `ID_PRODUIT` INT(11) NOT NULL,
-    `LIBELLE` VARCHAR(255) NOT NULL,
-    `PRIX_HT` DECIMAL(10, 2) NOT NULL,
-    `IMAGEURL` VARCHAR(250) NOT NULL
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI;
-
---
 -- Déchargement des données de la table `produit`
 --
 
@@ -243,18 +209,6 @@ INSERT INTO `PRODUIT` (
 );
 
 -- --------------------------------------------------------
-
---
--- Structure de la table `user`
---
-
-CREATE TABLE `USER` (
-    `ID_USER` INT(11) NOT NULL,
-    `LOGIN` VARCHAR(255) NOT NULL,
-    `PASSWORD` VARCHAR(255) NOT NULL,
-    `EMAIL` VARCHAR(255) NOT NULL
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI;
-
 --
 -- Déchargement des données de la table `user`
 --
@@ -282,113 +236,6 @@ INSERT INTO `USER` (
     '$2y$10$ZjmEtsUSjb4S4Z.OYC1XhOwDRoGd81LgxG0D/m4nNft5rh.HcAHTS',
     'test2@test.fr'
 );
-
---
--- Index pour les tables déchargées
---
-
---
--- Index pour la table `commande`
---
-ALTER TABLE `COMMANDE`
-    ADD PRIMARY KEY (
-        `ID_COMMANDE`
-    ), ADD KEY `ID_USER` (
-        `ID_USER`
-    ), ADD KEY `ID_ETAT` (
-        `ID_ETAT`
-    );
-
---
--- Index pour la table `ligne`
---
-ALTER TABLE `LIGNE`
-    ADD PRIMARY KEY (
-        `ID_LIGNE`
-    ), ADD KEY `ID_COMMANDE` (
-        `ID_COMMANDE`
-    ), ADD KEY `ID_PRODUIT` (
-        `ID_PRODUIT`
-    );
-
---
--- Index pour la table `produit`
---
-ALTER TABLE `PRODUIT`
-    ADD PRIMARY KEY (
-        `ID_PRODUIT`
-    );
-
---
--- Index pour la table `user`
---
-ALTER TABLE `USER`
-    ADD PRIMARY KEY (
-        `ID_USER`
-    );
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `commande`
---
-ALTER TABLE `COMMANDE` MODIFY `ID_COMMANDE` INT(
-    11
-) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT pour la table `ligne`
---
-ALTER TABLE `LIGNE` MODIFY `ID_LIGNE` INT(
-    11
-) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT pour la table `produit`
---
-ALTER TABLE `PRODUIT` MODIFY `ID_PRODUIT` INT(
-    11
-) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT pour la table `user`
---
-ALTER TABLE `USER` MODIFY `ID_USER` INT(
-    11
-) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- Contraintes pour les tables déchargées
---
-
---
--- Contraintes pour la table `commande`
---
-ALTER TABLE `COMMANDE`
-    ADD CONSTRAINT `COMMANDE_IBFK_1` FOREIGN KEY (
-        `ID_USER`
-    )
-        REFERENCES `USER` (
-            `ID_USER`
-        );
-
---
--- Contraintes pour la table `ligne`
---
-ALTER TABLE `LIGNE`
-    ADD CONSTRAINT `LIGNE_IBFK_1` FOREIGN KEY (
-        `ID_COMMANDE`
-    )
-        REFERENCES `COMMANDE` (
-            `ID_COMMANDE`
-        ), ADD CONSTRAINT `LIGNE_IBFK_2` FOREIGN KEY (
-            `ID_PRODUIT`
-        )
-            REFERENCES `PRODUIT` (
-                `ID_PRODUIT`
-            );
 
 COMMIT;
 
