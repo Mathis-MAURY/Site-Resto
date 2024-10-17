@@ -17,8 +17,6 @@ CREATE OR REPLACE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne`
         -- Calculer le total ligne HT
         SET NEW.total_ligne_ht = COALESCE(prix_ht, 0) * NEW.qte;
     END IF;
-
-<<<<<<< HEAD
     -- Vérifier si la quantité est positive
     IF NEW.qte <= 0 THEN
         SIGNAL SQLSTATE '45000' 
@@ -113,7 +111,6 @@ CREATE OR REPLACE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne`
     INTO total_commande 
     FROM ligne 
     WHERE id_commande = NEW.id_commande;
-=======
 CREATE TRIGGER `AFTER_INSERT_LIGNE` 
 AFTER INSERT ON `LIGNE` 
 FOR EACH ROW
@@ -170,18 +167,16 @@ BEGIN
                 END$$            DELIMITER;
 
 /* Troisieme TRIGGER ORGANISER */
->>>>>>> 3a5264bddf01eaa0a1bdc5e800eb21459faa8c55
 
     -- Calculer le total TTC
     SET total_commande = total_commande * tva;
 
-<<<<<<< HEAD
     -- Mettre à jour le total de la commande
     UPDATE commande 
     SET total_commande = total_commande 
     WHERE id_commande = NEW.id_commande;
 END |
-=======
+
 /* Quatrieme TRIGGER ORGANISER */
 
                 DELIMITER        $$ CREATE TRIGGER `BEFORE_UPDATE_LIGNE` BEFORE UPDATE ON `LIGNE` FOR EACH ROW BEGIN DECLARE PRIXPRODUITHT DECIMAL(10, 2) DEFAULT 0;
@@ -192,4 +187,3 @@ END |
                 -- Calculer le total HT de la ligne
                 SET              NEW.TOTAL_LIGNE_HT = PRIXPRODUITHT * NEW.QTE;
                 END$$            DELIMITER;
->>>>>>> 3a5264bddf01eaa0a1bdc5e800eb21459faa8c55
