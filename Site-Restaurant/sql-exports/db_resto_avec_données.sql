@@ -22,16 +22,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 -- Base de données : `db_restoweb`
-USE `db_restoweb`;
+USE `DB_RESTOWEB`;
 
 -- Déchargement des données de la table `commande`
-INSERT INTO `commande` (
-    `id_commande`,
-    `id_user`,
-    `id_etat`,
-    `date`,
-    `total_commande`,
-    `type_conso`
+INSERT INTO `COMMANDE` (
+    `ID_COMMANDE`,
+    `ID_USER`,
+    `ID_ETAT`,
+    `DATE`,
+    `TOTAL_COMMANDE`,
+    `TYPE_CONSO`
 ) VALUES (
     6,
     8,
@@ -58,12 +58,12 @@ INSERT INTO `commande` (
 );
 
 -- Déchargement des données de la table `ligne`
-INSERT INTO `ligne` (
-    `id_ligne`,
-    `id_commande`,
-    `id_produit`,
-    `qte`,
-    `total_ligne_ht`
+INSERT INTO `LIGNE` (
+    `ID_LIGNE`,
+    `ID_COMMANDE`,
+    `ID_PRODUIT`,
+    `QTE`,
+    `TOTAL_LIGNE_HT`
 ) VALUES (
     17,
     6,
@@ -129,11 +129,11 @@ INSERT INTO `ligne` (
 );
 
 -- Déchargement des données de la table `produit`
-INSERT INTO `produit` (
-    `id_produit`,
-    `libelle`,
-    `prix_ht`,
-    `imageurl`
+INSERT INTO `PRODUIT` (
+    `ID_PRODUIT`,
+    `LIBELLE`,
+    `PRIX_HT`,
+    `IMAGEURL`
 ) VALUES (
     1,
     'pizza margherita',
@@ -190,11 +190,11 @@ INSERT INTO `produit` (
 );
 
 -- Déchargement des données de la table `user`
-INSERT INTO `user` (
-    `id_user`,
-    `login`,
-    `password`,
-    `email`
+INSERT INTO `USER` (
+    `ID_USER`,
+    `LOGIN`,
+    `PASSWORD`,
+    `EMAIL`
 ) VALUES (
     1,
     'jef',

@@ -1,6 +1,6 @@
 <?php
-  $pageTitle = "Payer";
-  include 'fonctions/header.php';
+$pageTitle = "Payer";
+include 'fonctions/header.php';
 
 include "fonctions/ConnexionBDD.php";
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -10,7 +10,7 @@ $connexionBDD = new ConnexionBDD();
 $messageErreur = "";
 
 $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
-if(count($panier) == 0){
+if (count($panier) == 0) {
     header("Location: commander.php");
 }
 
@@ -26,12 +26,12 @@ if (isset($_POST["submit"])) {
     if ($cryptogramme == NULL || mb_strlen($cryptogramme) != 3) {
         $messageErreur = "Le cryptogramme doit faire 3 caractères de long.";
     }
-    
+
     //str_replace(' ', '', $carte): Cela supprime tous les espaces du numéro de carte, vous permettant de vérifier la longueur correcte sans tenir compte des espaces.
     if ($carte == NULL || mb_strlen(str_replace(' ', '', $carte)) != 16) {
         $messageErreur = "Le numéro de la carte doit faire 16 caractères de long.";
     }
-    
+
 
     if ($nom == NULL || mb_strlen($nom) < 3) {
         $messageErreur = "Le nom doit faire plus de 3 caractères de longueur";
@@ -43,9 +43,10 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
+
 <body>
     <img src="assets/images/log.png" alt="">
-    
+
     <form action="" method="POST" class="form_payer">
         <h2>Payer</h2>
         <p>Commande d'un montant de <b>

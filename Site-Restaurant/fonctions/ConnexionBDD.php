@@ -131,34 +131,50 @@ class ConnexionBDD
     public function calculerTotalPanier($panier)
     {
         $total = 0;
-        // Si le panier est vide, on retourne 0 pour le total
-        if ($panier == NULL || $panier == [] || count($panier) == 0) {
+    
+        // Si le panier est vide, retourner 0 pour le total
+        if (empty($panier)) {
             return $total;
         }
+    
         $ids = [];
         foreach ($panier as $p) {
-            $ids[] = $p["id_produit"];
+            // Vérifiez que l'ID est bien défini et est un entier
+            if (isset($p["id_produit"]) && is_numeric($p["id_produit"])) {
+                $ids[] = intval($p["id_produit"]); // Convertir en entier
+            }
         }
-
+    
+        // Vérifiez que nous avons des IDs avant de continuer
+        if (empty($ids)) {
+            return $total; // Pas d'ID produit
+        }
+    
+        // Construire la requête avec les IDs
         $imploded = implode(",", $ids);
-
-        $produits = $this->prepareAndFetchAll("SELECT produit.prix_ht, produit.id_produit FROM produit WHERE produit.id_produit IN ($imploded);");
-
-
+    
+        // Créez la requête SQL pour récupérer les produits
+        $query = "SELECT produit.prix_ht, produit.id_produit FROM produit WHERE produit.id_produit IN ($imploded);";
+    
+        // Log de la requête pour le débogage (facultatif)
+        error_log($query);
+    
+        // Exécuter la requête
+        $produits = $this->prepareAndFetchAll($query);
+    
         foreach ($produits as $prod) {
             $prix = $prod["prix_ht"];
             $id = $prod["id_produit"];
             $qty = $this->rechercheQuantiteDansPanier($panier, $id);
-
+    
             if ($qty != -1) {
-                $prix = $qty * $prix;
-                $total += $prix;
+                $total += $qty * $prix; // Calculer le total
             }
-
         }
+    
         return $total;
     }
-
+    
     private function rechercheQuantiteDansPanier($panier, $idProduit)
     {
         foreach ($panier as $p) {
@@ -170,36 +186,66 @@ class ConnexionBDD
     }
 
     public function insererCommandeEtProduitDepuisPanier($typeConso)
-    {
-        $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
+{
+    $panier = json_decode($_COOKIE["panier"] ?? "[]", true);
 
-        $this->prepareAndFetchOne(
-            "INSERT INTO commande(id_user, id_etat, date, total_commande, type_conso) VALUES (:idUser, :idEtat, SYSDATE(), 0, :typeConso)",
-            [
-                ":idUser" => $_SESSION["user"]["id_user"],
-                ":idEtat" => 0,
-                ":typeConso" => $typeConso
-            ]
-        );
+    // Insertion de la commande sans id_etat
+    $this->prepareAndFetchOne(
+        "INSERT INTO commande(id_user, date, total_commande, type_conso) VALUES (:idUser, SYSDATE(), 0, :typeConso)",
+        [
+            ":idUser" => $_SESSION["user"]["id_user"],
+            ":typeConso" => $typeConso
+        ]
+    );
 
-        $idCommandeInseree = $this->dbh->lastInsertId();
+    $idCommandeInseree = $this->dbh->lastInsertId();
+    $totalCommande = 0;
 
-        foreach ($panier as $produit) {
-            $idProduit = $produit["id_produit"];
-            $quantite = $produit["qty"];
+    foreach ($panier as $produit) {
+        $idProduit = $produit["id_produit"];
+        $quantite = $produit["qty"];
 
-            $this->prepareAndFetchOne(
-                "INSERT INTO ligne(id_commande, id_produit, qte, total_ligne_ht) VALUES (:idCommande, :idProduit, :qte, :totalHt)",
-                [
-                    ":idCommande" => $idCommandeInseree,
-                    ":idProduit" => $idProduit,
-                    ":qte" => $quantite,
-                    ":totalHt" => 0
-                ]
+        // Vérifiez que l'ID du produit et la quantité sont valides
+        if (isset($idProduit) && is_numeric($quantite) && $quantite > 0) {
+            // Récupérer le prix du produit
+            $prixProduit = $this->prepareAndFetchOne(
+                "SELECT prix_ht FROM produit WHERE id_produit = :idProduit",
+                [":idProduit" => $idProduit]
             );
-        }
 
-        $_SESSION["idDeCommandeDernierementInseree"] = $idCommandeInseree;
+            if ($prixProduit && isset($prixProduit['prix_ht'])) {
+                $prixProduit = $prixProduit['prix_ht'];
+                $totalLigne = $prixProduit * $quantite;
+                $totalCommande += $totalLigne;
+
+                // Insertion dans la table ligne
+                $this->prepareAndFetchOne(
+                    "INSERT INTO ligne(id_commande, id_produit, qte, total_ligne_ht) VALUES (:idCommande, :idProduit, :qte, :totalHt)",
+                    [
+                        ":idCommande" => $idCommandeInseree,
+                        ":idProduit" => $idProduit,
+                        ":qte" => $quantite,
+                        ":totalHt" => $totalLigne
+                    ]
+                );
+            } else {
+                error_log("Produit avec ID $idProduit non trouvé ou prix non défini.");
+            }
+        } else {
+            error_log("ID produit ou quantité invalides : ID = $idProduit, Quantité = $quantite.");
+        }
     }
+
+    // Mise à jour du total de la commande
+    $this->prepareAndFetchOne(
+        "UPDATE commande SET total_commande = :totalCommande WHERE id_commande = :idCommande",
+        [
+            ":totalCommande" => $totalCommande,
+            ":idCommande" => $idCommandeInseree
+        ]
+    );
+
+    $_SESSION["idDeCommandeDernierementInseree"] = $idCommandeInseree;
+}
 }
 ?>
