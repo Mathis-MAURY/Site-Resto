@@ -16,9 +16,6 @@
     <ul>
       <li><a href="index.php">Accueil</a></li>
       <li><a href="menu.php">Menu</a></li>
-      <li><a href="commander.php">Commander</a></li>
-      <li><a href="connexion.php">Connexion</a></li>
-      <li><a href="inscription.php">Inscription</a></li>
     </ul>
   </nav>
 </header>

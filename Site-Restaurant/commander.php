@@ -29,7 +29,6 @@ $plats = $connexionBDD->prepareAndFetchAll("SELECT * FROM produit");
 
 <body>
 <header>
-    <a href="index.php"><img class="retour" src="images/RETOUR.png" alt="Retour à la page d'accueil"></a>
     <img class="logo" src="images/FLASHMEAL.jpg">
 </header>
 <aside id="profile">
