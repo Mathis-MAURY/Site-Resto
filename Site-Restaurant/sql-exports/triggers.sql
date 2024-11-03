@@ -95,11 +95,15 @@ END |
 /* Quatrieme TRIGGER Organiser */
 
 DELIMITER |
-CREATE OR REPLACE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne`
- FOR EACH ROW BEGIN
+
+-- Trigger AFTER UPDATE sur la table `ligne`
+CREATE OR REPLACE TRIGGER `after_ligne_update` 
+AFTER UPDATE ON `ligne`
+FOR EACH ROW 
+BEGIN
     DECLARE total_commande DECIMAL(10, 2) DEFAULT 0;
     DECLARE type_conso INT DEFAULT 0;
-    DECLARE tva DECIMAL(3, 3) DEFAULT 0;
+    DECLARE tva DECIMAL(5, 3) DEFAULT 1.000;
 
     -- Récupérer le type de consommation
     SELECT c.type_conso 
@@ -119,31 +123,51 @@ CREATE OR REPLACE TRIGGER `after_ligne_update` AFTER UPDATE ON `ligne`
     INTO total_commande 
     FROM ligne 
     WHERE id_commande = NEW.id_commande;
-CREATE TRIGGER `AFTER_INSERT_LIGNE` 
-AFTER INSERT ON `LIGNE` 
-FOR EACH ROW
+
+    -- Calculer le total TTC
+    SET total_commande = total_commande * tva;
+
+    -- Mettre à jour le total de la commande
+    UPDATE commande 
+    SET total_commande = total_commande 
+    WHERE id_commande = NEW.id_commande;
+END |
+
+-- Trigger AFTER INSERT sur la table `ligne`
+CREATE OR REPLACE TRIGGER `after_insert_ligne` 
+AFTER INSERT ON `ligne`
+FOR EACH ROW 
 BEGIN
-    DECLARE TOTALTTC DECIMAL(10, 2) DEFAULT 0;
-    DECLARE
-        CONSOMMATIONTYPE INT DEFAULT 0;
-        DECLARE          TVARATE DECIMAL(5, 3) DEFAULT 1.000;
- 
-        -- Obtenir le type de consommation de la commande
-        SELECT           TYPE_CONSO INTO CONSOMMATIONTYPE FROM COMMANDE WHERE COMMANDE.ID_COMMANDE = NEW.ID_COMMANDE;
- 
-        -- Appliquer le taux de TVA en fonction du type de consommation
-        IF               CONSOMMATIONTYPE = 1 THEN
-            SET TVARATE = 1.055;
-            ELSEIF           CONSOMMATIONTYPE = 2 THEN
-                SET TVARATE = 1.100;
-            END IF;
- 
-            -- Calculer le total HT des lignes de la commande
-            SELECT           SUM(TOTAL_LIGNE_HT) INTO TOTALTTC FROM LIGNE WHERE LIGNE.ID_COMMANDE = NEW.ID_COMMANDE;
- 
-            -- Calculer le total TTC
-            SET              TOTALTTC = TOTALTTC * TVARATE;
- 
-            -- Mettre à jour le total de la commande
-            UPDATE           COMMANDE SET TOTAL_COMMANDE = TOTALTTC WHERE COMMANDE.ID_COMMANDE = NEW.ID_COMMANDE;
-            END$$            DELIMITER;
+    DECLARE total_ttc DECIMAL(10, 2) DEFAULT 0;
+    DECLARE consommation_type INT DEFAULT 0;
+    DECLARE tva_rate DECIMAL(5, 3) DEFAULT 1.000;
+
+    -- Obtenir le type de consommation de la commande
+    SELECT type_conso 
+    INTO consommation_type 
+    FROM commande 
+    WHERE id_commande = NEW.id_commande;
+
+    -- Appliquer le taux de TVA en fonction du type de consommation
+    IF consommation_type = 1 THEN
+        SET tva_rate = 1.055;
+    ELSEIF consommation_type = 2 THEN
+        SET tva_rate = 1.1;
+    END IF;
+
+    -- Calculer le total HT des lignes de la commande
+    SELECT COALESCE(SUM(total_ligne_ht), 0) 
+    INTO total_ttc 
+    FROM ligne 
+    WHERE id_commande = NEW.id_commande;
+
+    -- Calculer le total TTC
+    SET total_ttc = total_ttc * tva_rate;
+
+    -- Mettre à jour le total de la commande
+    UPDATE commande 
+    SET total_commande = total_ttc 
+    WHERE id_commande = NEW.id_commande;
+END |
+
+DELIMITER |
