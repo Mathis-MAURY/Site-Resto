@@ -1,5 +1,4 @@
 /* Premier TRIGGER Organiser */
-
 DELIMITER |
 CREATE OR REPLACE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne`
  FOR EACH ROW BEGIN
@@ -25,9 +24,10 @@ CREATE OR REPLACE TRIGGER `before_ligne_insert` BEFORE INSERT ON `ligne`
         SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
     END IF;
 END |
+DELIMITER |
+
 
 /* Deuxieme TRIGGER Organiser */
-
 DELIMITER |
 CREATE OR REPLACE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne`
  FOR EACH ROW BEGIN
@@ -54,9 +54,10 @@ CREATE OR REPLACE TRIGGER `before_ligne_update` BEFORE UPDATE ON `ligne`
         SET MESSAGE_TEXT = 'La quantité doit être supérieure à zéro.';
     END IF;
 END |
+DELIMITER |
+
 
 /* Troisieme TRIGGER Organiser */
-
 DELIMITER |
 CREATE OR REPLACE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne`
  FOR EACH ROW BEGIN
@@ -91,12 +92,11 @@ CREATE OR REPLACE TRIGGER `after_ligne_insert` AFTER INSERT ON `ligne`
     SET total_commande = total_commande 
     WHERE id_commande = NEW.id_commande;
 END |
-
-/* Quatrieme TRIGGER Organiser */
-
 DELIMITER |
 
--- Trigger AFTER UPDATE sur la table `ligne`
+
+/* Quatrieme TRIGGER Organiser */
+DELIMITER |
 CREATE OR REPLACE TRIGGER `after_ligne_update` 
 AFTER UPDATE ON `ligne`
 FOR EACH ROW 
@@ -132,42 +132,4 @@ BEGIN
     SET total_commande = total_commande 
     WHERE id_commande = NEW.id_commande;
 END |
-
--- Trigger AFTER INSERT sur la table `ligne`
-CREATE OR REPLACE TRIGGER `after_insert_ligne` 
-AFTER INSERT ON `ligne`
-FOR EACH ROW 
-BEGIN
-    DECLARE total_ttc DECIMAL(10, 2) DEFAULT 0;
-    DECLARE consommation_type INT DEFAULT 0;
-    DECLARE tva_rate DECIMAL(5, 3) DEFAULT 1.000;
-
-    -- Obtenir le type de consommation de la commande
-    SELECT type_conso 
-    INTO consommation_type 
-    FROM commande 
-    WHERE id_commande = NEW.id_commande;
-
-    -- Appliquer le taux de TVA en fonction du type de consommation
-    IF consommation_type = 1 THEN
-        SET tva_rate = 1.055;
-    ELSEIF consommation_type = 2 THEN
-        SET tva_rate = 1.1;
-    END IF;
-
-    -- Calculer le total HT des lignes de la commande
-    SELECT COALESCE(SUM(total_ligne_ht), 0) 
-    INTO total_ttc 
-    FROM ligne 
-    WHERE id_commande = NEW.id_commande;
-
-    -- Calculer le total TTC
-    SET total_ttc = total_ttc * tva_rate;
-
-    -- Mettre à jour le total de la commande
-    UPDATE commande 
-    SET total_commande = total_ttc 
-    WHERE id_commande = NEW.id_commande;
-END |
-
 DELIMITER |

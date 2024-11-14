@@ -14,12 +14,12 @@ $commandes = $connexionBdd->prepareAndFetchAll(
 );
 
 // Organiser les commandes par leur ID pour regrouper les lignes
-$commandesGrouped = [];
+$tabCommandes = [];
 foreach ($commandes as $commande) {
     $commandeId = $commande['id_commande'];
-    if (!isset($commandesGrouped[$commandeId])) {
+    if (!isset($tabCommandes[$commandeId])) {
         // Si la commande n'existe pas dans le tableau regroupé, l'ajouter
-        $commandesGrouped[$commandeId] = [
+        $tabCommandes[$commandeId] = [
             'id_commande' => $commande['id_commande'],
             'id_user' => $commande['id_user'],
             'id_etat' => $commande['id_etat'],
@@ -34,7 +34,7 @@ foreach ($commandes as $commande) {
         ];
     }
     // Ajouter la ligne à la commande correspondante dans le tableau regroupé
-    $commandesGrouped[$commandeId]['lignes'][] = [
+    $tabCommandes[$commandeId]['lignes'][] = [
         'id_ligne' => $commande['id_ligne'],
         'id_produit' => $commande['id_produit'],
         'libelle_produit' => $commande["libelle"],
@@ -44,11 +44,11 @@ foreach ($commandes as $commande) {
 }
 
 // Convertir le tableau regroupé en un tableau simple pour la réponse JSON
-$commandesGrouped = array_values($commandesGrouped);
+$tabCommandes = array_values($tabCommandes);
 
 header("Content-Type: application/json");
 ReponseJson::repondre([
     "success" => true,
-    "nbCommandes" => count($commandesGrouped),
-    "commandes" => $commandesGrouped
+    "nbCommandes" => count($tabCommandes),
+    "commandes" => $tabCommandes
 ]);
