@@ -9,7 +9,7 @@ header("Content-Type: application/json");
 // Si l'ID de commande est manquant, le script renvoie une réponse JSON indiquant l'erreur, puis le script se termine.
 if (!isset($_GET["id_commande"])) {
     ReponseJson::repondre([
-        "succes" => false,
+        "success" => false,
         "erreur" => "Vous devez fournir un id de commande avec le parametre URL ?id_commande=XX"
     ]);
 }
@@ -18,7 +18,7 @@ $commande = $_GET["id_commande"];
 // On vérifie si l'ID de commande existe dans la base 
 if (!$connexionBdd->prepareAndFetchOne("SELECT * FROM commande WHERE id_commande = :id_commande", [":id_commande" => $commande])) {
     ReponseJson::repondre([
-        "succes" => false,
+        "success" => false,
         "erreur" => "La commande $commande est inexistante"
     ]);
 }
@@ -33,6 +33,6 @@ $commandes = $connexionBdd->prepareAndFetchOne(
 );
 
 ReponseJson::repondre([
-    "succes" => true,
+    "success" => true,
     "message" => "La commande $commande est terminer"
 ]);
