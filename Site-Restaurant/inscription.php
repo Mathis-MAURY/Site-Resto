@@ -35,7 +35,7 @@
         <p class="separator"></p>
         
         <label>Mot de passe</label>
-        <input type="password" id="password" name="password" required placeholder="********">
+        <input type="password" id="password" name="password" required placeholder="************">
         
         <a href="connexion.php" class="sublink">Vous avez déjà un compte ?</a>
         

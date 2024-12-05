@@ -33,7 +33,7 @@ CREATE TABLE `commande` (
   `id_commande` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id_etat` int(11) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `date_commande` datetime NOT NULL DEFAULT current_timestamp(),
   `total_commande` decimal(10,2) NOT NULL DEFAULT 0.00,
   `type_conso` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -42,7 +42,7 @@ CREATE TABLE `commande` (
 -- Déchargement des données de la table `commande`
 --
 
-INSERT INTO `commande` (`id_commande`, `id_user`, `id_etat`, `date`, `total_commande`, `type_conso`) VALUES
+INSERT INTO `commande` (`id_commande`, `id_user`, `id_etat`, `date_commande`, `total_commande`, `type_conso`) VALUES
 (16, 1, 0, '2024-10-29 14:38:05', 26.50, 1);
 
 -- --------------------------------------------------------
@@ -101,7 +101,7 @@ INSERT INTO `produit` (`id_produit`, `libelle`, `prix_ht`, `imageurl`) VALUES
 -- Structure de la table `user`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE `utilisateur` (
   `id_user` int(11) NOT NULL,
   `login` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id_user`, `login`, `password`, `email`) VALUES
+INSERT INTO `utilisateur` (`id_user`, `login`, `password`, `email`) VALUES
 (1, 'leo', '$2y$10$OPEElGC0F4PghGraYRFl7OmH57cnVWvApKYF/oWDRmEkj8PVhiwBu', 'leo@m2l.fr'),
 (8, 'test', '$2y$10$wgYsVsexeJHE0Bitxz2OXuzvyGZEhEZdYoR/cxS02SnRkkCmLrxxa', 'test@test.fr'),
 (10, 'franck', '$2y$10$ZjmEtsUSjb4S4Z.OYC1XhOwDRoGd81LgxG0D/m4nNft5rh.HcAHTS', 'test2@test.fr');
