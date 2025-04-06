@@ -11,7 +11,7 @@ Ce site est entièrement réalisé en PHP, HTML/CSS et JS, sans framework additi
 | [Trello (**répartition des tâches et trace des tâches effectuées**)](https://trello.com/invite/b/DMcH42SS/ATTI983851ac1a4c96e8ffe8c59c61876a33B76D73D1/repartition-des-taches)  |  
 | [Google Drive **(avec les lotissements)**](https://drive.google.com/drive/folders/1jfV3y8JKOnZ9T33b9-EevwMtnBbMO1CJ)  |  
 | [Documentation Technique API **(structures json, schéma url etc...)**](https://drive.google.com/file/d/1fOxDLz6sVuGGB-E_w7bv8bUJlHoQtQXV/view?usp=sharing) |
-| [Documentation Technique Application **(Lot 6)**]() |
+| [Documentation Technique Application **(Lot 6)**](https://drive.google.com/drive/u/4/folders/1Ik5FDUR5VODNmpU7rwirAqXvSj44WI7i) |
 ### Installation
 
 **Prérequis**: 
